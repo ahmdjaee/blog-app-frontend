@@ -15,7 +15,7 @@ const PostDetail = () => {
     <>
       {(isLoading, isFetching) ? (
         <Flex vertical gap={24} style={{ maxWidth: "800px", margin: "0 auto" }}>
-          <Skeleton.Image style={{ width: "100%",  height: "50vh" }} />
+          <Skeleton.Image style={{ width: "100%", height: "50vh" }} />
           <Skeleton />
           <Skeleton />
           <Skeleton />
@@ -29,7 +29,7 @@ const PostDetail = () => {
         />
       )}
 
-      <section style={{ marginTop: 24, marginBottom: 100, maxWidth: 800, marginInline: "auto" }}>
+      <section style={{ marginBlock: 64, maxWidth: 800, marginInline: "auto" }}>
         {post?.id && <CommentSection postId={post?.id} />}
       </section>
     </>

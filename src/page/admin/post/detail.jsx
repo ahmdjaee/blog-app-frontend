@@ -2,37 +2,35 @@ import CommentSection from "@/components/CommentSection";
 import PreviewPost from "@/components/PreviewPost";
 import { useGetBaseQuery } from "@/service/baseApi";
 import { Flex, Skeleton } from "antd";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function PostDetailPanel() {
-  const { state } = useLocation();
-
+  const { slug } = useParams();
   const { data, isLoading, isFetching } = useGetBaseQuery({
-    url: `/posts/${state?.slug}`,
+    url: `/posts/${slug}`,
   });
 
-  const post = data?.data ?? {};
-  if ((isLoading, isFetching)) {
-    return (
-      <Flex vertical gap={16} style={{ maxWidth: "800px", margin: "0 auto" }}>
-        <Skeleton.Image style={{ width: "100%", height: 300 }} />
-        <Skeleton />
-        <Skeleton />
-        <Skeleton />
-      </Flex>
-    );
-  }
-
+  const post = data?.data;
   return (
     <>
-      <PreviewPost
-        author={post?.author?.name}
-        content={post?.content}
-        title={post?.title}
-        thumbnail={post?.thumbnail}
-      />
-      <section style={{ marginTop: 24, maxWidth: 800, marginInline: "auto" }}>
-        <CommentSection postId={state?.id} />
+      {(isLoading, isFetching) ? (
+        <Flex vertical gap={24} style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <Skeleton.Image style={{ width: "100%", height: "50vh" }} />
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+        </Flex>
+      ) : (
+        <PreviewPost
+          title={post?.title}
+          thumbnail={post?.thumbnail}
+          content={post?.content}
+          author={post?.author.name}
+        />
+      )}
+
+      <section style={{ marginBlock: 64, maxWidth: 800, marginInline: "auto" }}>
+        {post?.id && <CommentSection postId={post?.id} />}
       </section>
     </>
   );
