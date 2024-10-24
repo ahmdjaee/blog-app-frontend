@@ -4,10 +4,18 @@ import { useRegisterMutation } from "@/service/extended/authApi";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import Title from "antd/es/typography/Title";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
   const [register, { isLoading }] = useRegisterMutation();
-  const onFinish = async (values) => register(values);
+  const navigate = useNavigate();
+
+  const onFinish = async (values) => {
+    try {
+      await register(values).unwrap();
+      navigate("/auth/login");
+    } catch (error) {}
+  };
+  
   return (
     <FloatCircularIndicator isLoading={isLoading}>
       <Form
@@ -37,6 +45,7 @@ const Register = () => {
           rules={[
             {
               required: true,
+              type: "email",
             },
           ]}
         >

@@ -1,15 +1,14 @@
 import SubmitButton from "@/components/SubmitButton";
-import useSlug from "@/hooks/useSlug";
 import { validateMessage } from "@/lib/rule";
-import { useCreateUserMutation } from "@/service/extended/userApi";
+import { useUpdateCommentMutation } from "@/service/extended/commentApi";
 import { Button, Drawer, Form, Input, Select, Space, Spin } from "antd";
 import { useEffect } from "react";
 
-function CreateUserForm({ open, onClose }) {
+function UpdateCommentForm({ open, onClose, data }) {
   const [form] = Form.useForm();
-  const slug = useSlug({ value: Form.useWatch("name", form) });
+  const oldPasssword = Form.useWatch("old_password", form);
 
-  const [createUser, { isLoading }] = useCreateUserMutation();
+  const [updateComment, { isLoading }] = useUpdateCommentMutation();
 
   const handleOnClose = () => {
     form.resetFields();
@@ -17,22 +16,20 @@ function CreateUserForm({ open, onClose }) {
   };
 
   useEffect(() => {
-    form.setFieldsValue({
-      slug: slug,
-    });
-  }, [slug, form]);
+    form.setFieldsValue(data);
+  }, [data, form]);
 
   const onFinish = async (values) => {
-    await createUser(values);
+    await updateComment({ id: data.key, ...values });
   };
 
   return (
-    <Drawer title="Create User" onClose={handleOnClose} open={open}>
+    <Drawer forceRender title="Edit Comment" onClose={handleOnClose} open={open}>
       <Spin spinning={isLoading}>
         <Form
           onFinish={onFinish}
           form={form}
-          name="create-user"
+          name="edit-comment"
           layout="vertical"
           autoComplete="off"
           validateMessages={validateMessage}
@@ -46,7 +43,7 @@ function CreateUserForm({ open, onClose }) {
               },
             ]}
           >
-            <Input placeholder="Insert user name" />
+            <Input placeholder="Insert comment name" />
           </Form.Item>
           <Form.Item
             name="email"
@@ -60,16 +57,27 @@ function CreateUserForm({ open, onClose }) {
             <Input type="email" placeholder="Email" />
           </Form.Item>
           <Form.Item
-            name="password"
-            label="Password"
+            name="old_password"
+            label="Old Password"
             rules={[
               {
-                required: true,
                 min: 8,
               },
             ]}
           >
-            <Input.Password autoComplete="off"  placeholder="Password" />
+            <Input.Password autoComplete="off" placeholder="Password" />
+          </Form.Item>
+          <Form.Item
+            name="new_password"
+            label="New Password"
+            rules={[
+              {
+                required: oldPasssword ? true : false,
+                min: 8,
+              },
+            ]}
+          >
+            <Input.Password placeholder="Password" />
           </Form.Item>
           <Form.Item
             label="Role"
@@ -86,7 +94,7 @@ function CreateUserForm({ open, onClose }) {
               allowClear
               options={[
                 { label: "Admin", value: "admin" },
-                { label: "User", value: "user" },
+                { label: "Comment", value: "comment" },
               ]}
             />
           </Form.Item>
@@ -102,4 +110,4 @@ function CreateUserForm({ open, onClose }) {
   );
 }
 
-export default CreateUserForm;
+export default UpdateCommentForm;

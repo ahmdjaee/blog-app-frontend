@@ -1,9 +1,7 @@
+import useDebounced from "@/hooks/useDebounce";
+import { SEARCH_TIMEOUT } from "@/lib/settings";
 import { useDeletePostMutation, useGetPostQuery } from "@/service/extended/postApi";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import {
   Button,
   Flex,
@@ -16,20 +14,29 @@ import {
   Typography,
 } from "antd";
 import "quill/dist/quill.snow.css";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 const { Search } = Input;
 const { Text } = Typography;
 
 const PostPanel = () => {
+  const [params, setParams] = useState({
+    keyword: "",
+    page: 1,
+    limit: 10,
+  });
+
   const {
     data: list,
     isLoading: isListLoading,
     isFetching: isListFetching,
-  } = useGetPostQuery();
+  } = useGetPostQuery(params);
+
   const [deletePost, { isLoading: isDeleteLoading }] = useDeletePostMutation();
-  const onSearch = (value) => {
-    console.log("🚀 ~ onSearch ~ value:", value);
-  };
+
+  const setSearchParams = useDebounced((e) => {
+    setParams({ ...params, keyword: e.target.value });
+  }, SEARCH_TIMEOUT);
 
   const handleDelete = async (id) => {
     await deletePost(id);
@@ -97,7 +104,7 @@ const PostPanel = () => {
       align: "right",
       render: (_, record) => (
         <Space size="small">
-          <Link to={`/admin/posts/${record.slug}`}>
+          <Link to={`/admin/posts/${record.slug}`} state={record}>
             <Button color="primary" size="small" variant="text">
               <EyeOutlined />
             </Button>
@@ -132,9 +139,6 @@ const PostPanel = () => {
     author_id: post.author.id,
   }));
 
-  const onRowClick = (record) => {
-    console.log("🚀 ~ onRowClick ~ record:", record);
-  };
   return (
     <>
       <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
@@ -147,15 +151,26 @@ const PostPanel = () => {
           placeholder="input search text"
           allowClear
           name="search"
-          onChange={onSearch}
+          onChange={setSearchParams}
           style={{ width: 500 }}
         />
       </Flex>
       <Spin spinning={isListLoading || isListFetching || isDeleteLoading}>
         <Table
-          onRow={(record) => ({ onClick: () => onRowClick(record) })}
           columns={columns}
           dataSource={dataSource}
+          pagination={{
+            current: params.page,
+            pageSize: params.limit,
+            total: list?.meta?.total,
+            showTotal: (total) => `Total ${total} items`,
+          }}
+          onChange={(pagination) => {
+            setParams({
+              page: pagination.current,
+              limit: pagination.pageSize,
+            });
+          }}
         />
         ;
       </Spin>

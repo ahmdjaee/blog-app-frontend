@@ -5,16 +5,19 @@ import { setUserAndToken } from "@/service/token";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Flex, Form, Input } from "antd";
 import Title from "antd/es/typography/Title";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [login, { isLoading }] = useLoginMutation();
-  
+
+  let from = location.state?.from?.pathname || "/";
+
   const onFinish = async (formData) => {
     try {
       const { data } = await login(formData).unwrap();
       setUserAndToken(data);
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (error) {}
   };
 
@@ -38,6 +41,7 @@ const Login = () => {
           rules={[
             {
               required: true,
+              type: "email",
             },
           ]}
         >
@@ -51,7 +55,7 @@ const Login = () => {
             },
           ]}
         >
-          <Input prefix={<LockOutlined />} type="password" placeholder="Password" />
+          <Input.Password prefix={<LockOutlined />} placeholder="Password" />
         </Form.Item>
         <Form.Item>
           <Flex justify="space-between" align="center">

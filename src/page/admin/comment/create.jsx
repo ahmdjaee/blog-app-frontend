@@ -1,15 +1,15 @@
 import SubmitButton from "@/components/SubmitButton";
 import useSlug from "@/hooks/useSlug";
 import { validateMessage } from "@/lib/rule";
-import { useCreateUserMutation } from "@/service/extended/userApi";
+import { useCreateCommentMutation } from "@/service/extended/commentApi";
 import { Button, Drawer, Form, Input, Select, Space, Spin } from "antd";
 import { useEffect } from "react";
 
-function CreateUserForm({ open, onClose }) {
+function CreateCommentForm({ open, onClose }) {
   const [form] = Form.useForm();
   const slug = useSlug({ value: Form.useWatch("name", form) });
 
-  const [createUser, { isLoading }] = useCreateUserMutation();
+  const [createComment, { isLoading }] = useCreateCommentMutation();
 
   const handleOnClose = () => {
     form.resetFields();
@@ -23,16 +23,16 @@ function CreateUserForm({ open, onClose }) {
   }, [slug, form]);
 
   const onFinish = async (values) => {
-    await createUser(values);
+    await createComment(values);
   };
 
   return (
-    <Drawer title="Create User" onClose={handleOnClose} open={open}>
+    <Drawer title="Create Comment" onClose={handleOnClose} open={open}>
       <Spin spinning={isLoading}>
         <Form
           onFinish={onFinish}
           form={form}
-          name="create-user"
+          name="create-comment"
           layout="vertical"
           autoComplete="off"
           validateMessages={validateMessage}
@@ -46,7 +46,7 @@ function CreateUserForm({ open, onClose }) {
               },
             ]}
           >
-            <Input placeholder="Insert user name" />
+            <Input placeholder="Insert comment name" />
           </Form.Item>
           <Form.Item
             name="email"
@@ -86,7 +86,7 @@ function CreateUserForm({ open, onClose }) {
               allowClear
               options={[
                 { label: "Admin", value: "admin" },
-                { label: "User", value: "user" },
+                { label: "Comment", value: "comment" },
               ]}
             />
           </Form.Item>
@@ -102,4 +102,4 @@ function CreateUserForm({ open, onClose }) {
   );
 }
 
-export default CreateUserForm;
+export default CreateCommentForm;

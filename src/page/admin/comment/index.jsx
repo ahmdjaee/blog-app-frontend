@@ -1,18 +1,18 @@
 import useDebounced from "@/hooks/useDebounce";
 import { SEARCH_TIMEOUT } from "@/lib/settings";
-import { useDeleteUserMutation, useGetUserQuery } from "@/service/extended/userApi";
+import { useDeleteCommentMutation, useGetCommentsQuery } from "@/service/extended/commentApi";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, Popconfirm, Space, Spin, Table } from "antd";
 import { useState } from "react";
-import CreateUserForm from "./create";
-import UpdateUserForm from "./edit";
+import CreateCommentForm from "./create";
+import UpdatePostForm from "./edit";
 const { Search } = Input;
 
-function UserPanel() {
+function CommentPanel() {
   const [openCreate, setOpenCreate] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
-  const [user, setUser] = useState({});
-
+  const [comment, setComment] = useState({});
+  
   const [params, setParams] = useState({
     keyword: "",
     page: 1,
@@ -23,12 +23,12 @@ function UserPanel() {
     data: list,
     isFetching: isListFetching,
     isLoading: isListLoading,
-  } = useGetUserQuery(params);
+  } = useGetCommentsQuery(params);
 
-  const [deleteUser, { isLoading: isDeleteLoading }] = useDeleteUserMutation();
+  const [deleteComment, { isLoading: isDeleteLoading }] = useDeleteCommentMutation();
 
   const handleDelete = async (id) => {
-    await deleteUser(id);
+    await deleteComment(id);
   };
 
   const setSearchParams = useDebounced((e) => {
@@ -40,7 +40,7 @@ function UserPanel() {
   };
 
   const showUpdateDrawer = (record) => {
-    setUser(record);
+    setComment(record);
     setOpenUpdate(true);
   };
 
@@ -49,25 +49,20 @@ function UserPanel() {
   };
 
   const onCloseUpdate = () => {
-    setUser({});
+    setComment({});
     setOpenUpdate(false);
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "User",
+      dataIndex: "user",
+      key: "user",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Role",
-      dataIndex: "role",
-      key: "role",
+      title: "Comment",
+      dataIndex: "content",
+      key: "comment",
     },
     {
       title: "Action",
@@ -85,7 +80,7 @@ function UserPanel() {
           </Button>
 
           <Popconfirm
-            title="Are you sure to delete this user?"
+            title="Are you sure to delete this comment?"
             placement="topLeft"
             onConfirm={() => handleDelete(record.key)}
           >
@@ -98,16 +93,17 @@ function UserPanel() {
     },
   ];
 
-  const dataSource = list?.data?.map((user) => ({
-    ...user,
-    key: user.id,
+  const dataSource = list?.data?.map((comment) => ({
+    ...comment,
+    user: comment?.user?.name,
+    key: comment.id,
   }));
 
   return (
     <>
       <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
         <Button type="primary" onClick={showCreateDrawer}>
-          Create User
+          Create Comment
         </Button>
         <Search
           placeholder="input search text"
@@ -136,10 +132,10 @@ function UserPanel() {
         />
         ;
       </Spin>
-      <CreateUserForm open={openCreate} onClose={onCloseCreate} />
-      <UpdateUserForm open={openUpdate} onClose={onCloseUpdate} data={user} />
+      <CreateCommentForm open={openCreate} onClose={onCloseCreate} />
+      <UpdatePostForm open={openUpdate} onClose={onCloseUpdate} data={comment} />
     </>
   );
 }
 
-export default UserPanel;
+export default CommentPanel;

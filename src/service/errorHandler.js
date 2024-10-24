@@ -1,3 +1,4 @@
+import { LinkToLogin } from "@/components/LinkToLogin";
 import { notification } from "antd";
 
 export function errorHandler(response) {
@@ -9,8 +10,9 @@ export function errorHandler(response) {
     return response?.data;
   } else if (response?.status === 401) {
     notification.error({
-      message: "Unauthorized",
-      description: "You are not authorized to access this resource.",
+      message: "Oops!, You are not logged in.",
+      description: "Please login to continue.",
+      btn: LinkToLogin,
     });
     return response?.data;
   } else if (response?.status === 422) {

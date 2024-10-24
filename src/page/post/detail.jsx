@@ -1,43 +1,36 @@
+import CommentSection from "@/components/CommentSection";
 import PreviewPost from "@/components/PreviewPost";
-import SubmitButton from "@/components/SubmitButton";
-import { validateMessage } from "@/lib/rule";
-import { Button, Form } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import "quill/dist/quill.snow.css";
-import { useLocation } from "react-router-dom";
+import { useGetBaseQuery } from "@/service/baseApi";
+import { Flex, Skeleton } from "antd";
+import { useParams } from "react-router-dom";
 
 const PostDetail = () => {
-  const {
-    state: { post },
-  } = useLocation();
-  console.log("🚀 ~ PostDetail ~ state:", post);
+  const { slug } = useParams();
+  const { data, isLoading, isFetching } = useGetBaseQuery({
+    url: `/posts/${slug}`,
+  });
 
+  const post = data?.data;
   return (
     <>
-      <PreviewPost
-        title={post?.title}
-        thumbnail={post?.thumbnail}
-        content={post?.content}
-        author={post?.author.name}
-      />
-      <section style={{ marginTop: 24, maxWidth: 800, marginInline: "auto" }}>
-        <Form name="comment-section" validateMessages={validateMessage}>
-          <h3>Leave a comment</h3>
-          <Form.Item
-            name="comment"
-            style={{ marginTop: 10 }}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <TextArea rows={4} placeholder="Write your comment here" />
-          </Form.Item>
-          <Button htmlType="submit" type="primary">
-            Submit
-          </Button>
-        </Form>
+      {(isLoading, isFetching) ? (
+        <Flex vertical gap={24} style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <Skeleton.Image style={{ width: "100%",  height: "50vh" }} />
+          <Skeleton />
+          <Skeleton />
+          <Skeleton />
+        </Flex>
+      ) : (
+        <PreviewPost
+          title={post?.title}
+          thumbnail={post?.thumbnail}
+          content={post?.content}
+          author={post?.author.name}
+        />
+      )}
+
+      <section style={{ marginTop: 24, marginBottom: 100, maxWidth: 800, marginInline: "auto" }}>
+        {post?.id && <CommentSection postId={post?.id} />}
       </section>
     </>
   );

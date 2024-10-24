@@ -1,25 +1,35 @@
 import { useAuth } from "@/hooks/useAuth";
+import { removeAuth } from "@/redux/authSlice";
+import { useLogoutMutation } from "@/service/extended/authApi";
 import { useGetCategoryQuery } from "@/service/extended/categoryApi";
+import { removeUserAndToken } from "@/service/token";
 import {
   AppstoreAddOutlined,
   AppstoreOutlined,
   ArrowLeftOutlined,
   BarsOutlined,
   BookOutlined,
+  ContainerOutlined,
+  ExclamationCircleFilled,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Drawer, Flex, Input, Layout, Menu } from "antd";
+import { Avatar, Button, Drawer, Flex, Input, Layout, Menu, Modal } from "antd";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 const { Search } = Input;
 const { Content } = Layout;
+const { confirm } = Modal;
 
 const MainLayout = () => {
   const [open, setOpen] = useState(false);
   const [back, setBack] = useState(true);
   const user = useAuth();
-  const { data } = useGetCategoryQuery();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { data } = useGetCategoryQuery();
+  const [logout] = useLogoutMutation();
 
   const categories = data?.data.map((category) => ({
     key: `/posts/category/${category.slug}`,
@@ -33,9 +43,14 @@ const MainLayout = () => {
       icon: <AppstoreOutlined />,
     },
     {
-      key: "/posts",
+      key: "/2",
       label: "Markah",
       icon: <BookOutlined />,
+    },
+    {
+      key: "/admin/dashboard",
+      label: "Manage Posts",
+      icon: <ContainerOutlined />,
     },
     {
       type: "divider",
@@ -50,7 +65,7 @@ const MainLayout = () => {
       type: "divider",
     },
     {
-      key: "/",
+      key: "logout",
       label: "Logout",
       icon: <LogoutOutlined />,
     },
@@ -63,7 +78,26 @@ const MainLayout = () => {
   };
 
   const onClick = (e) => {
-    navigate(e.key);
+    switch (e.key) {
+      case "logout":
+        confirm({
+          title: "Are you sure want to logout?",
+          icon: <ExclamationCircleFilled />,
+          content: "Press Ok to proceed",
+          onOk()  {
+            return logout()
+              .unwrap()
+              .then(() => {
+                removeUserAndToken();
+                dispatch(removeAuth());
+              })
+              .catch(() => {});
+          },
+        });
+        break;
+      default:
+        navigate(e.key);
+    }
     setOpen(false);
   };
 

@@ -1,12 +1,14 @@
 import SubmitButton from "@/components/SubmitButton";
-import { useUpdateCategoryMutation } from "@/service/extended/categoryApi";
-import { Button, Drawer, Form, Input, Space, Spin } from "antd";
+import { validateMessage } from "@/lib/rule";
+import { useUpdateUserMutation } from "@/service/extended/userApi";
+import { Button, Drawer, Form, Input, Select, Space, Spin } from "antd";
 import { useEffect } from "react";
 
-function UpdateCategoryForm({ open, onClose, data }) {
+function UpdateUserForm({ open, onClose, data }) {
   const [form] = Form.useForm();
+  const oldPasssword = Form.useWatch("old_password", form);
 
-  const [updateCategory, { isLoading }] = useUpdateCategoryMutation();
+  const [updateUser, { isLoading }] = useUpdateUserMutation();
 
   const handleOnClose = () => {
     form.resetFields();
@@ -18,18 +20,19 @@ function UpdateCategoryForm({ open, onClose, data }) {
   }, [data, form]);
 
   const onFinish = async (values) => {
-    await updateCategory({ id: data.key, ...values });
+    await updateUser({ id: data.key, ...values });
   };
 
   return (
-    <Drawer forceRender title="Create Category" onClose={handleOnClose} open={open}>
+    <Drawer forceRender title="Edit User" onClose={handleOnClose} open={open}>
       <Spin spinning={isLoading}>
         <Form
           onFinish={onFinish}
           form={form}
-          name="create-category"
+          name="edit-user"
           layout="vertical"
           autoComplete="off"
+          validateMessages={validateMessage}
         >
           <Form.Item
             name="name"
@@ -40,18 +43,60 @@ function UpdateCategoryForm({ open, onClose, data }) {
               },
             ]}
           >
-            <Input placeholder="Insert category name" />
+            <Input placeholder="Insert user name" />
           </Form.Item>
           <Form.Item
-            name="slug"
-            label="Slug"
+            name="email"
+            label="Email"
             rules={[
               {
                 required: true,
               },
             ]}
           >
-            <Input placeholder="slug-example-name" />
+            <Input type="email" placeholder="Email" />
+          </Form.Item>
+          <Form.Item
+            name="old_password"
+            label="Old Password"
+            rules={[
+              {
+                min: 8,
+              },
+            ]}
+          >
+            <Input.Password autoComplete="off" placeholder="Password" />
+          </Form.Item>
+          <Form.Item
+            name="new_password"
+            label="New Password"
+            rules={[
+              {
+                required: oldPasssword ? true : false,
+                min: 8,
+              },
+            ]}
+          >
+            <Input.Password placeholder="Password" />
+          </Form.Item>
+          <Form.Item
+            label="Role"
+            name="role"
+            hasFeedback
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select role"
+              allowClear
+              options={[
+                { label: "Admin", value: "admin" },
+                { label: "User", value: "user" },
+              ]}
+            />
           </Form.Item>
           <Form.Item>
             <Space>
@@ -65,4 +110,4 @@ function UpdateCategoryForm({ open, onClose, data }) {
   );
 }
 
-export default UpdateCategoryForm;
+export default UpdateUserForm;

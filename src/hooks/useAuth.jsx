@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { removeAuth, selectAuth, setAuth } from "@/redux/authSlice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUserAndToken } from "../service/token";
 
 export const useAuth = () => {
-  const [auth, setAuth] = useState(null);
-
-  const navigate = useNavigate();
-  const location = useLocation();
+  const dispatch = useDispatch();
+  const auth = useSelector(selectAuth);
 
   useEffect(() => {
     const user = getCurrentUserAndToken();
 
     if (user) {
-      setAuth(user);
+      dispatch(setAuth(user));
     } else {
-      setAuth(null);
+      dispatch(removeAuth());
     }
-  }, [navigate, location]);
+  }, [dispatch]);
 
   return auth;
 };

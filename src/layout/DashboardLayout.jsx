@@ -4,6 +4,7 @@ import {
   AppstoreOutlined,
   BarChartOutlined,
   CloudOutlined,
+  CommentOutlined,
   MenuFoldOutlined,
   ShopOutlined,
   TeamOutlined,
@@ -30,21 +31,6 @@ const siderStyle = {
 
 const items = [
   {
-    key: "/admin/users",
-    icon: <TeamOutlined />,
-    label: "Users",
-  },
-  {
-    key: "2",
-    icon: <VideoCameraOutlined />,
-    label: "Comments",
-  },
-  {
-    key: "3",
-    icon: <UploadOutlined />,
-    label: "",
-  },
-  {
     key: "/admin/dashboard",
     icon: <BarChartOutlined />,
     label: "Dashboard",
@@ -60,15 +46,30 @@ const items = [
     label: "Categories",
   },
   {
-    key: "7",
-    icon: <TeamOutlined />,
-    label: "nav 7",
+    key: "/admin/comments",
+    icon: <CommentOutlined />,
+    label: "Comments",
   },
   {
-    key: "8",
-    icon: <ShopOutlined />,
-    label: "nav 8",
+    key: "/admin/users",
+    icon: <TeamOutlined />,
+    label: "Users",
   },
+  // {
+  //   key: "3",
+  //   icon: <UploadOutlined />,
+  //   label: "",
+  // },
+  // {
+  //   key: "7",
+  //   icon: <TeamOutlined />,
+  //   label: "nav 7",
+  // },
+  // {
+  //   key: "8",
+  //   icon: <ShopOutlined />,
+  //   label: "nav 8",
+  // },
 ];
 
 const DashboardLayout = () => {

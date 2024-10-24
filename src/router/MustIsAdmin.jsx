@@ -1,11 +1,12 @@
 import { useAuth } from "@/hooks/useAuth";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 function MustIsAdmin() {
   const user = useAuth();
+  let location = useLocation();
 
   if (user?.role !== "admin") {
-    return <Navigate to="/" />;
+    return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
   return <Outlet />;

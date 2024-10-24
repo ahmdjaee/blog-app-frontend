@@ -1,13 +1,14 @@
+import CommentSection from "@/components/CommentSection";
 import PreviewPost from "@/components/PreviewPost";
 import { useGetBaseQuery } from "@/service/baseApi";
 import { Flex, Skeleton } from "antd";
-import React from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function PostDetailPanel() {
-  const { slug } = useParams();
+  const { state } = useLocation();
+
   const { data, isLoading, isFetching } = useGetBaseQuery({
-    url: `/posts/${slug}`,
+    url: `/posts/${state?.slug}`,
   });
 
   const post = data?.data ?? {};
@@ -23,12 +24,17 @@ function PostDetailPanel() {
   }
 
   return (
-    <PreviewPost
-      author={post?.author?.name}
-      content={post?.content}
-      title={post?.title}
-      thumbnail={post?.thumbnail}
-    />
+    <>
+      <PreviewPost
+        author={post?.author?.name}
+        content={post?.content}
+        title={post?.title}
+        thumbnail={post?.thumbnail}
+      />
+      <section style={{ marginTop: 24, maxWidth: 800, marginInline: "auto" }}>
+        <CommentSection postId={state?.id} />
+      </section>
+    </>
   );
 }
 

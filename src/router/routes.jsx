@@ -19,22 +19,25 @@ import CreatePostPanel from "@/page/admin/post/create";
 import PostDetailPanel from "@/page/admin/post/detail";
 import PostEditPanel from "@/page/admin/post/edit";
 import UserPanel from "@/page/admin/user";
+import CommentPanel from "@/page/admin/comment";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="admin" element={<DashboardLayout />}>
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="categories" element={<CategoryPanel />} />
-        <Route path="users" element={<UserPanel />} />
-        <Route path="posts" element={<PostPanel />} />
-        <Route path="posts/create" element={<CreatePostPanel />} />
-        <Route path="posts/edit" element={<PostEditPanel />} />
-        <Route path="posts/:slug" element={<PostDetailPanel />} />
+      <Route element={<MustIsAdmin />}>
+        <Route path="admin" element={<DashboardLayout />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="categories" element={<CategoryPanel />} />
+          <Route path="users" element={<UserPanel />} />
+          <Route path="posts" element={<PostPanel />} />
+          <Route path="comments" element={<CommentPanel />} />
+          <Route path="posts/create" element={<CreatePostPanel />} />
+          <Route path="posts/edit" element={<PostEditPanel />} />
+          <Route path="posts/:slug" element={<PostDetailPanel />} />
+        </Route>
       </Route>
 
-      <Route element={<MustIsAdmin />}></Route>
-      <Route element={<RequireAuth />}></Route>
+      {/* <Route element={<RequireAuth />}></Route> */}
 
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />

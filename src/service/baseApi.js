@@ -1,9 +1,10 @@
+import { removeAuth } from "@/redux/authSlice";
 import { isFulfilled, isRejectedWithValue } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getCurrentUserAndToken, removeUserAndToken } from "./token";
 import { notification } from "antd";
+import { getCurrentUserAndToken, removeUserAndToken } from "./token";
 
-export const handleResponse = () => (next) => (action) => {
+export const handleResponse = (api) => (next) => (action) => {
   if (isFulfilled(action)) {
     const type = action?.meta?.arg?.type;
 
@@ -19,14 +20,36 @@ export const handleResponse = () => (next) => (action) => {
 
   if (isRejectedWithValue(action)) {
     const status = action?.payload?.status;
+    const responseStatus = action?.meta?.baseQueryMeta?.response?.status;
+
+    if (status === 401 || responseStatus === 401) {
+      if (api.getState().auth.user) {
+        removeUserAndToken();
+        api.dispatch(removeAuth());
+        notification.error({
+          message: "Unauthorized or session expired.",
+          description: "Please log in to access this resource.",
+        });
+      }
+    }
 
     switch (status) {
-      case 401: {
-        removeUserAndToken();
-
-        break;
-      }
+      // case 401: {
+      //   if (api.getState().auth.user) {
+      //     removeUserAndToken();
+      //     api.dispatch(removeAuth());
+      //     notification.error({
+      //       message: "Unauthorized or session expired.",
+      //       description: "Please log in to access this resource.",
+      //     });
+      //   }
+      //   break;
+      // }
       case "FETCH_ERROR": {
+        notification.error({
+          message: "Error",
+          description: "Something went wrong. Please try again later.",
+        });
         break;
       }
     }
@@ -50,6 +73,8 @@ export const baseApi = createApi({
 
       headers.set("Accept", "application/json");
       if (token) headers.set("Authorization", `Bearer ${token}`);
+
+      return headers;
     },
   }),
   endpoints: (builder) => ({
