@@ -11,6 +11,7 @@ function PostDetailPanel() {
   });
 
   const post = data?.data;
+  
   return (
     <>
       {(isLoading, isFetching) ? (
@@ -30,7 +31,7 @@ function PostDetailPanel() {
       )}
 
       <section style={{ marginBlock: 64, maxWidth: 800, marginInline: "auto" }}>
-        {post?.id && <CommentSection postId={post?.id} />}
+        {post?.id && <CommentSection post={post} />}
       </section>
     </>
   );

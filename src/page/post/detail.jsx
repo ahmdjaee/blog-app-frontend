@@ -30,7 +30,7 @@ const PostDetail = () => {
       )}
 
       <section style={{ marginBlock: 64, maxWidth: 800, marginInline: "auto" }}>
-        {post?.id && <CommentSection postId={post?.id} />}
+        {post?.id && <CommentSection post={post} />}
       </section>
     </>
   );

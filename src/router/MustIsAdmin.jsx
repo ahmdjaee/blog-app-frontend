@@ -6,10 +6,20 @@ function MustIsAdmin() {
   let location = useLocation();
 
   if (user?.role !== "admin") {
-    return <Navigate to="/auth/login" state={{ from: location }} replace />;
+    return <Navigate to="/user/dashboard" state={{ from: location }} replace />;
   }
 
   return <Outlet />;
 }
+// function MustIsAdmin() {
+//   const user = useAuth();
+//   let location = useLocation();
+
+//   if (user?.role !== "admin") {
+//     return <Navigate to="/auth/login" state={{ from: location }} replace />;
+//   }
+
+//   return <Outlet />;
+// }
 
 export default MustIsAdmin;

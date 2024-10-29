@@ -1,7 +1,7 @@
+import { ConfigProvider, Spin } from "antd";
+import { Suspense } from "react";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router/routes";
-import { Suspense } from "react";
-import { ConfigProvider, Spin } from "antd";
 function App() {
   return (
     <ConfigProvider>

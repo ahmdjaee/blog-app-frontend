@@ -22,7 +22,7 @@ import "quill/dist/quill.snow.css";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function CreatePostPanel() {
+function PostCreatePanel() {
   const [preview, setPreview] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [form] = Form.useForm();
@@ -80,6 +80,7 @@ function CreatePostForm({ html, form, getThumbnail, onRemove }) {
     useCreatePostMutation();
 
   const quillRef = useRef();
+  const user = useAuth();
 
   useEffect(() => {
     form.setFieldsValue({
@@ -88,7 +89,6 @@ function CreatePostForm({ html, form, getThumbnail, onRemove }) {
   }, [slug, form]);
 
   const onFinish = async (values) => {
-    console.log("🚀 ~ onFinish ~ values:", values);
     await createPost({
       ...values,
       thumbnail: values?.thumbnail?.file,
@@ -98,9 +98,13 @@ function CreatePostForm({ html, form, getThumbnail, onRemove }) {
 
   useEffect(() => {
     if (isSuccessPost) {
-      navigate("/admin/posts");
+      if (user?.role === "admin") {
+        navigate("/admin/posts");
+      } else {
+        navigate("/user/posts");
+      }
     }
-  }, [isSuccessPost, navigate]);
+  }, [isSuccessPost, navigate, user?.role]);
 
   return (
     <Spin spinning={isLoadingPost}>
@@ -197,4 +201,4 @@ function CreatePostForm({ html, form, getThumbnail, onRemove }) {
   );
 }
 
-export default CreatePostPanel;
+export default PostCreatePanel;

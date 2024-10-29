@@ -23,6 +23,12 @@ export function errorHandler(response) {
       });
     }
     return response?.data;
+  } else if (response?.status === 403) {
+    notification.error({
+      message: "Forbidden",
+      description: response?.data?.message,
+    });
+    return response?.data;
   } else {
     notification.error({
       message: "Error",

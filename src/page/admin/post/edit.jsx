@@ -1,12 +1,11 @@
+import CommentSection from "@/components/CommentSection";
 import Editor from "@/components/Editor";
 import PreviewPost from "@/components/PreviewPost";
 import SubmitButton from "@/components/SubmitButton";
 import { useAuth } from "@/hooks/useAuth";
 import { validateMessage } from "@/lib/rule";
 import { useGetCategoryQuery } from "@/service/extended/categoryApi";
-import {
-  useUpdatePostMutation
-} from "@/service/extended/postApi";
+import { useUpdatePostMutation } from "@/service/extended/postApi";
 import { InfoCircleOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -24,13 +23,14 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function PostEditPanel() {
+  const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [form] = Form.useForm();
   const title = Form.useWatch("title", form);
   const { state } = useLocation();
-  console.log("🚀 ~ PostEditPanel ~ state:", state)
   const user = useAuth();
+
   const getThumbnail = (file) => {
     setThumbnail(URL.createObjectURL(file));
     // Prevent upload
@@ -40,6 +40,16 @@ function PostEditPanel() {
   const onRemove = () => {
     setThumbnail(null);
   };
+
+  useEffect(() => {
+    if (!state) {
+      if (user?.role === "admin") {
+        navigate("/admin/posts");
+      } else {
+        navigate("/user/posts");
+      }
+    }
+  }, [state, navigate, user?.role]);
 
   return (
     <Tabs
@@ -69,6 +79,11 @@ function PostEditPanel() {
             />
           ),
         },
+        // {
+        //   label: "Manage Comments",
+        //   key: "3",
+        //   children: <CommentSection post={state} />,
+        // },
       ]}
     />
   );
@@ -82,6 +97,7 @@ function EditPostForm({ html, form, getThumbnail, onRemove }) {
     useUpdatePostMutation();
 
   const quillRef = useRef();
+  const user = useAuth();
 
   const onFinish = async (values) => {
     await updatePost({
@@ -94,9 +110,13 @@ function EditPostForm({ html, form, getThumbnail, onRemove }) {
 
   useEffect(() => {
     if (isSuccessPost) {
-      navigate("/admin/posts");
+      if (user?.role === "admin") {
+        navigate("/admin/posts");
+      } else {
+        navigate("/user/posts");
+      }
     }
-  }, [isSuccessPost, navigate]);
+  }, [isSuccessPost, navigate, user?.role]);
 
   return (
     <Spin spinning={isLoadingPost}>
@@ -110,6 +130,7 @@ function EditPostForm({ html, form, getThumbnail, onRemove }) {
         initialValues={{
           ...state,
           slug: state?.slug?.split("-").slice(1).join("-"),
+          category_id: state?.category?.id,
           thumbnail: null,
         }}
       >

@@ -1,8 +1,10 @@
+import { useAuth } from "@/hooks/useAuth";
 import {
+  useDeleteCommentMutation,
   useGetCommentByPostQuery,
   useSendCommentMutation,
 } from "@/service/extended/commentApi";
-import { MessageOutlined } from "@ant-design/icons";
+import { DeleteOutlined, MessageOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -10,16 +12,17 @@ import {
   Empty,
   Flex,
   Form,
+  Popconfirm,
   Skeleton,
   Space,
   Typography,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-const CommentSection = ({ postId }) => {
+const CommentSection = ({ post = {} }) => {
   const { data: comments, isLoading: isListLoading } = useGetCommentByPostQuery(
-    postId,
+    post?.id,
     {
       pollingInterval: 30000,
     }
@@ -27,69 +30,7 @@ const CommentSection = ({ postId }) => {
 
   const [sendComment, { isLoading }] = useSendCommentMutation();
   const onFinish = async (values) => {
-    await sendComment({ post_id: postId, ...values });
-  };
-
-  const handleReplies = (replies) => {
-    if (replies) {
-      return replies?.map((reply) => (
-        <Flex gap={16} style={{ marginLeft: 28 }} key={reply?.id}>
-          {/* <Divider
-            type="vertical"
-            style={{
-              borderColor: "lightgray",
-              borderWidth: 2,
-              height: "inherit",
-            }}
-          /> */}
-          <Card
-            key={reply?.id}
-            styles={{
-              actions: {
-                border: "none",
-              },
-              body: {
-                paddingTop: 16,
-                paddingBottom: 8,
-              },
-            }}
-            actions={[
-              <Flex
-                align="center"
-                justify="end"
-                style={{ paddingInline: 24 }}
-                key="message"
-                gap={8}
-              >
-                <MessageOutlined />
-                <Typography.Text>Reply</Typography.Text>
-              </Flex>,
-            ]}
-            style={{
-              flex: 1,
-            }}
-          >
-            <Card.Meta
-              avatar={
-                <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
-              }
-              title={
-                <Space>
-                  {reply?.user?.name}
-                  <Typography.Text
-                    type="secondary"
-                    style={{ fontSize: 12, fontWeight: 400 }}
-                  >
-                    {reply?.created_at}
-                  </Typography.Text>
-                </Space>
-              }
-              description={<p>{reply?.content}</p>}
-            />
-          </Card>
-        </Flex>
-      ));
-    }
+    await sendComment({ post_id: post?.id, ...values });
   };
 
   return (
@@ -113,7 +54,11 @@ const CommentSection = ({ postId }) => {
           <Fragment key={comment?.id}>
             <Card
               styles={{
-                actions: { border: "none", backgroundColor: "#F8F8F8" },
+                actions: {
+                  border: "none",
+                  backgroundColor: "#F8F8F8",
+                  position: "relative",
+                },
                 body: {
                   paddingTop: 16,
                   paddingBottom: 8,
@@ -121,16 +66,13 @@ const CommentSection = ({ postId }) => {
                 },
               }}
               actions={[
-                <Flex
-                  align="center"
-                  justify="end"
-                  style={{ paddingInline: 24 }}
-                  key="message"
-                  gap={8}
-                >
-                  <MessageOutlined />
-                  <Typography.Text>Reply</Typography.Text>
-                </Flex>,
+                <CommentActions
+                  key={comment?.id}
+                  commentId={comment?.id}
+                  totalReply={comment?.replies?.length}
+                  user={comment?.user}
+                  post={post}
+                />,
               ]}
               style={{
                 minWidth: 300,
@@ -154,7 +96,11 @@ const CommentSection = ({ postId }) => {
                 description={<p>{comment?.content}</p>}
               />
             </Card>
-            {handleReplies(comment?.replies)}
+            <NestedReply
+              replies={comment?.replies}
+              commentId={comment?.id}
+              post={post}
+            />
           </Fragment>
         ))
       )}
@@ -162,4 +108,151 @@ const CommentSection = ({ postId }) => {
   );
 };
 
+function NestedReply({ replies, commentId, post }) {
+  if (replies) {
+    return replies?.map((reply) => (
+      <Flex gap={16} style={{ marginLeft: 28 }} key={reply?.id}>
+        <Card
+          key={reply?.id}
+          styles={{
+            actions: {
+              border: "none",
+            },
+            body: {
+              paddingTop: 16,
+              paddingBottom: 8,
+            },
+          }}
+          actions={[
+            <CommentActions
+              key={reply?.id}
+              commentId={commentId}
+              user={reply?.user}
+              post={post}
+            />,
+          ]}
+          style={{
+            flex: 1,
+          }}
+        >
+          <Card.Meta
+            avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
+            title={
+              <Space>
+                {reply?.user?.name}
+                <Typography.Text
+                  type="secondary"
+                  style={{ fontSize: 12, fontWeight: 400 }}
+                >
+                  {reply?.created_at}
+                </Typography.Text>
+              </Space>
+            }
+            description={<p>{reply?.content}</p>}
+          />
+        </Card>
+      </Flex>
+    ));
+  }
+}
+
+function CommentActions({ commentId, totalReply, user = {}, post = {} }) {
+  const [show, setShow] = useState(false);
+  const authUser = useAuth();
+
+  const [deleteComment] = useDeleteCommentMutation();
+  const [sendComment, { isLoading: isReplyLoading, isSuccess: isReplySuccess }] =
+    useSendCommentMutation();
+
+  const handleReply = async (value) => {
+    await sendComment({ post_id: post?.id, ...value, parent_id: commentId });
+  };
+
+  const handleDelete = async () => {
+    await deleteComment(commentId);
+  };
+
+  useEffect(() => {
+    if (isReplySuccess) {
+      setShow(false);
+    }
+  }, [isReplySuccess]);
+
+  return (
+    <Flex key="action-buttons" vertical style={{ paddingInline: 24 }}>
+      <Flex justify="end">
+        {totalReply > 0 && (
+          <p
+            style={{
+              color: "#1890ff",
+              lineHeight: "28px",
+              fontWeight: 500,
+              marginRight: "auto",
+            }}
+          >
+            {totalReply} replies
+          </p>
+        )}
+        <Button type="text" onClick={() => setShow(true)}>
+          <MessageOutlined />
+          Reply
+        </Button>
+        {(authUser?.role === "admin" ||
+          authUser?.id === user?.id ||
+          authUser?.id === post?.author?.id) && (
+          <Popconfirm
+            title="Are you sure to delete this comment?"
+            placement="topRight"
+            onConfirm={handleDelete}
+          >
+            <Button variant="text" color="danger">
+              <DeleteOutlined />
+              Delete
+            </Button>
+          </Popconfirm>
+        )}
+      </Flex>
+      {show && (
+        <Form
+          name="comment-section"
+          onFinish={handleReply}
+          key="comment"
+          style={{ width: "100%", marginRight: 8 }}
+          initialValues={{
+            content: `@${user?.name} `,
+          }}
+          onFocus={(e) => {
+            const length = e.target.value.length;
+            e.target.setSelectionRange(length, length);
+          }}
+        >
+          <Form.Item name="content" style={{ margin: 0, marginBottom: 8 }}>
+            <TextArea
+              disabled={isReplyLoading}
+              required
+              autoFocus
+              placeholder="Write your comment here"
+            />
+          </Form.Item>
+
+          <Flex align="center" gap={8} justify="end">
+            <Button type="text" size="small" onClick={() => setShow(false)}>
+              Cancel
+            </Button>
+            <Button
+              size="small"
+              loading={isReplyLoading}
+              htmlType="submit"
+              variant="text"
+              ghost
+              color="primary"
+            >
+              Reply
+            </Button>
+          </Flex>
+        </Form>
+      )}
+    </Flex>
+  );
+}
 export default CommentSection;

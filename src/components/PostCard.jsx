@@ -25,9 +25,11 @@ function PostCard({ post }) {
         <Title level={5} style={{ marginBottom: 5 }} ellipsis={{ rows: 3 }}>
           {post.title}
         </Title>
-        <Flex justify="space-between" style={{ marginTop: "auto" }}>
-          <Text type="success">{post.category.name}</Text>
-          <Text>{post.published_at}</Text>
+        <Flex justify="space-between"  style={{ marginTop: "auto" }}>
+          <Text type="success" >
+            {post.category.name}
+          </Text>
+          <Text style={{ textWrap: "nowrap" }}>{post.published_at}</Text>
         </Flex>
       </Flex>
     </div>

@@ -2,7 +2,7 @@ import { objectToFormData } from "@/lib/utils";
 import { baseApi } from "../baseApi";
 import { errorHandler } from "../errorHandler";
 
-const postApi = baseApi.injectEndpoints({
+export const postApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPost: builder.query({
       query: (params) => ({

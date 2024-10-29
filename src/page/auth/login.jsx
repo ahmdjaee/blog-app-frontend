@@ -10,8 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [login, { isLoading }] = useLoginMutation();
-
-  let from = location.state?.from?.pathname || "/";
+  let from = location.state?.from?.pathname || window.history.state?.prevUrl || "/";
 
   const onFinish = async (formData) => {
     try {

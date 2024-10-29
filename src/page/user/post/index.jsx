@@ -1,3 +1,4 @@
+import { useAuth } from "@/hooks/useAuth";
 import useDebounced from "@/hooks/useDebounce";
 import { SEARCH_TIMEOUT } from "@/lib/settings";
 import { useDeletePostMutation, useGetPostQuery } from "@/service/extended/postApi";
@@ -20,11 +21,14 @@ import { Link } from "react-router-dom";
 const { Search } = Input;
 const { Text } = Typography;
 
-const PostPanel = () => {
+const UserPostPanel = () => {
+  const user = useAuth();
+
   const [params, setParams] = useState({
     keyword: "",
     page: 1,
     limit: 10,
+    user_id: user.id,
   });
 
   const {
@@ -86,20 +90,21 @@ const PostPanel = () => {
       title: "Author",
       dataIndex: "author",
       key: "author",
+      render: (author) => <>{author?.name}</>,
     },
     {
       title: "Category",
       dataIndex: "category",
       key: "category",
-      render: (_, record) => <Text type="success">{record.category}</Text>,
+      render: (category) => <Text type="success">{category?.name}</Text>,
     },
     {
       title: "Published",
       dataIndex: "published",
       key: "published",
-      render: (_, record) => (
-        <Text type={record.published ? "success" : "danger"}>
-          {record.published ? "Published" : "Draft"}
+      render: (published) => (
+        <Text type={published ? "success" : "danger"}>
+          {published ? "Published" : "Draft"}
         </Text>
       ),
     },
@@ -114,13 +119,13 @@ const PostPanel = () => {
       align: "right",
       render: (_, record) => (
         <Space size="small">
-          <Link to={`/admin/posts/${record.slug}`} state={record}>
+          <Link to={`/user/posts/${record.slug}`} state={record}>
             <Button color="primary" size="small" variant="text">
               <EyeOutlined />
             </Button>
           </Link>
 
-          <Link to={`/admin/posts/edit`} state={record}>
+          <Link to={`/user/posts/edit`} state={record}>
             <Button color="primary" size="small" variant="text">
               <EditOutlined />
             </Button>
@@ -140,21 +145,12 @@ const PostPanel = () => {
     },
   ];
 
-  const dataSource = list?.data.map((post) => ({
-    ...post,
-    key: post.id,
-    category: post.category.name,
-    category_id: post.category.id,
-    author: post.author.name,
-    author_id: post.author.id,
-  }));
-
-
+  const dataSource = list?.data.map((post) => post);
 
   return (
     <>
       <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
-        <Link to="/admin/posts/create">
+        <Link to="/user/posts/create">
           <Button type="primary" onClick={() => {}}>
             Create Post
           </Button>
@@ -190,4 +186,4 @@ const PostPanel = () => {
   );
 };
 
-export default PostPanel;
+export default UserPostPanel;

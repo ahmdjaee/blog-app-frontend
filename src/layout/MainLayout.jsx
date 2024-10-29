@@ -1,65 +1,55 @@
+import Logo from "@/components/Logo";
+import ProfileButton from "@/components/ProfileButton";
 import { useAuth } from "@/hooks/useAuth";
 import { removeAuth } from "@/redux/authSlice";
 import { useLogoutMutation } from "@/service/extended/authApi";
-import { useGetCategoryQuery } from "@/service/extended/categoryApi";
 import { removeUserAndToken } from "@/service/token";
 import {
-  AppstoreAddOutlined,
-  AppstoreOutlined,
   ArrowLeftOutlined,
   BarsOutlined,
   BookOutlined,
   ContainerOutlined,
   ExclamationCircleFilled,
+  HomeOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Drawer, Flex, Input, Layout, Menu, Modal } from "antd";
-import { useState } from "react";
+import { Button, Drawer, Flex, Grid, Input, Layout, Menu, Modal } from "antd";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 const { Search } = Input;
 const { Content } = Layout;
 const { confirm } = Modal;
 
 const MainLayout = () => {
   const [open, setOpen] = useState(false);
-  const [back, setBack] = useState(true);
   const user = useAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { lg, md } = Grid.useBreakpoint();
 
-  const { data } = useGetCategoryQuery();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   const [logout] = useLogoutMutation();
-
-  const categories = data?.data.map((category) => ({
-    key: `/posts/category/${category.slug}`,
-    label: category.name,
-  }));
 
   const items = [
     {
       key: "/",
-      label: "Beranda",
-      icon: <AppstoreOutlined />,
+      label: "Home",
+      icon: <HomeOutlined />,
     },
     {
-      key: "/2",
-      label: "Markah",
+      key: "/posts/bookmark", 
+      label: "Bookmark",
       icon: <BookOutlined />,
     },
     {
       key: "/admin/dashboard",
       label: "Manage Posts",
       icon: <ContainerOutlined />,
-    },
-    {
-      type: "divider",
-    },
-    {
-      key: "category",
-      label: "Kategori",
-      icon: <AppstoreAddOutlined />,
-      children: categories,
     },
     {
       type: "divider",
@@ -84,7 +74,7 @@ const MainLayout = () => {
           title: "Are you sure want to logout?",
           icon: <ExclamationCircleFilled />,
           content: "Press Ok to proceed",
-          onOk()  {
+          onOk() {
             return logout()
               .unwrap()
               .then(() => {
@@ -102,43 +92,53 @@ const MainLayout = () => {
   };
 
   const onSearch = (value) => {
-    console.log("search:", value);
+    if (value) {
+      navigate(`/posts/search?keyword=${value}`);
+    }
   };
 
   return (
-    <Layout>
+    <div className="cs-layout">
+      {/* ANCHOR Navbar */}
       <nav className="cs-navbar">
-        <Flex justify="end" gap={"16px"} align="center">
-          {back && <ArrowLeftOutlined onClick={() => navigate(-1)} />}
-          <Avatar
+        <Flex
+          justify="end"
+          gap={"16px"}
+          style={{ maxWidth: 1250, marginInline: "auto" }}
+          align="center"
+        >
+          {location.pathname !== "/" && !lg && (
+            <ArrowLeftOutlined onClick={() => navigate(-1)} />
+          )}
+          {md && <Logo style={{ fontSize: 24, marginRight: "auto" }} />}
+
+          <ProfileButton
             style={{
-              backgroundColor: "orange",
-              verticalAlign: "middle",
-              marginRight: "auto",
-              display: !user && "none",
+              marginRight: !md && "auto",
             }}
-          >
-            J
-          </Avatar>
+          />
           <Button
-            size="small"
+            // size={md ? "middle" : "small"}
             color="primary"
             variant="filled"
-            style={{ display: user && "none", marginRight: "auto" }}
+            style={{ display: user && "none", order: md && 1 }}
             onClick={() => navigate("/auth/login")}
           >
             Log in
           </Button>
+
           <Search
             placeholder="input search text"
             allowClear
             name="search"
             onSearch={onSearch}
-            style={{ width: 200 }}
+            style={{ minWidth: 150, flex: 1, maxWidth: 500 }}
           />
           <Button icon={<BarsOutlined />} onClick={showDrawer} />
         </Flex>
       </nav>
+
+      {/* ANCHOR Menu */}
       <Drawer
         title="Menu"
         styles={{ body: { paddingBlock: "16px" } }}
@@ -153,14 +153,22 @@ const MainLayout = () => {
           mode="inline"
           inlineCollapsed={false}
           defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["category"]}
+          // defaultOpenKeys={["category"]}
           items={items}
         />
       </Drawer>
-      <Content style={{ padding: "16px", backgroundColor: "#fff" }}>
+      <Content
+        style={{
+          padding: "0 16px 16px 16px",
+          backgroundColor: "#fff",
+          maxWidth: "1200px",
+          width: "100%",
+          margin: "0 auto",
+        }}
+      >
         <Outlet />
       </Content>
-    </Layout>
+    </div>
   );
 };
 export default MainLayout;

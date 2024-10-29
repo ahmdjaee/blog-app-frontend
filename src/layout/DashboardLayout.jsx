@@ -1,18 +1,16 @@
-import React, { useEffect } from "react";
+import Logo from "@/components/Logo";
+import ProfileButton from "@/components/ProfileButton";
+import { useAuth } from "@/hooks/useAuth";
 import {
   AppstoreAddOutlined,
-  AppstoreOutlined,
   BarChartOutlined,
   CloudOutlined,
   CommentOutlined,
   MenuFoldOutlined,
-  ShopOutlined,
   TeamOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, theme, Grid } from "antd";
+import { Avatar, Button, Grid, Layout, Menu, Modal, theme } from "antd";
+import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 const { useBreakpoint } = Grid;
 const { Header, Content, Footer, Sider } = Layout;
@@ -29,7 +27,7 @@ const siderStyle = {
   zIndex: 10,
 };
 
-const items = [
+const itemsAdmin = [
   {
     key: "/admin/dashboard",
     icon: <BarChartOutlined />,
@@ -55,32 +53,33 @@ const items = [
     icon: <TeamOutlined />,
     label: "Users",
   },
-  // {
-  //   key: "3",
-  //   icon: <UploadOutlined />,
-  //   label: "",
-  // },
-  // {
-  //   key: "7",
-  //   icon: <TeamOutlined />,
-  //   label: "nav 7",
-  // },
-  // {
-  //   key: "8",
-  //   icon: <ShopOutlined />,
-  //   label: "nav 8",
-  // },
+];
+
+const itemsUser = [
+  {
+    key: "/user/dashboard",
+    icon: <BarChartOutlined />,
+    label: "Dashboard",
+  },
+  {
+    key: "/user/posts",
+    icon: <CloudOutlined />,
+    label: "Posts",
+  },
 ];
 
 const DashboardLayout = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const user = useAuth();
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { lg } = useBreakpoint();
   const [collapsed, setCollapsed] = React.useState(true);
+  const [modal, contextHolder] = Modal.useModal();
+  
   const onClickMenu = (e) => {
     navigate(e.key);
   };
@@ -103,14 +102,26 @@ const DashboardLayout = () => {
         }}
       >
         <div
+          onClick={() => setCollapsed(!collapsed)}
           style={{ height: 32, margin: 16, background: "rgba(255, 255, 255, 0.2)" }}
-        />
+        >
+          <Button
+            type="text"
+            icon={<MenuFoldOutlined />}
+            style={{
+              fontSize: "16px",
+              height: "inherit",
+              color: "#fff",
+              // display: !collapsed && "none"
+            }}
+          />
+        </div>
         <Menu
           onClick={onClickMenu}
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["4"]}
-          items={items}
+          items={user.role === "admin" ? itemsAdmin : itemsUser}
         />
       </Sider>
       <Layout
@@ -122,11 +133,15 @@ const DashboardLayout = () => {
         <Header
           style={{
             padding: 0,
+            paddingInline: 16,
             background: colorBgContainer,
             position: "static",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          {(collapsed || !lg) && (
+          {collapsed && (
             <Button
               type="text"
               icon={<MenuFoldOutlined />}
@@ -135,11 +150,16 @@ const DashboardLayout = () => {
                 fontSize: "16px",
                 width: 64,
                 height: 64,
-                zIndex: 11,
-                color: !collapsed && "#fff",
+                // display: !collapsed && "none"
               }}
             />
           )}
+          
+          <Logo style={{marginRight: "auto"}} />
+
+          <ProfileButton />
+          
+          {contextHolder}
         </Header>
 
         <Content
