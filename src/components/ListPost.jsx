@@ -1,17 +1,6 @@
 import PostCard from "@/components/PostCard";
 import { useGetPostQuery } from "@/service/extended/postApi";
-import {
-  Button,
-  Col,
-  Empty,
-  Flex,
-  Grid,
-  Row,
-  Skeleton,
-  Spin,
-  Typography
-} from "antd";
-const { useBreakpoint } = Grid;
+import { Button, Col, Empty, Flex, Row, Skeleton, Spin, Typography } from "antd";
 
 function ListPost({ onLoadMore, params = {}, title = "Latest Posts" }) {
   const { data: list, isLoading, isFetching, isError } = useGetPostQuery(params);
@@ -45,7 +34,8 @@ function ListPost({ onLoadMore, params = {}, title = "Latest Posts" }) {
             <Typography.Text type="secondary" strong style={{ margin: "0 auto" }}>
               No more posts
             </Typography.Text>
-          ) : !isError && list?.data?.length > 0 ? (
+          ) : // <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No more posts" />
+          !isError && list?.data?.length > 0 ? (
             <Button
               loading={isFetching}
               style={{ margin: "0 auto" }}

@@ -16,6 +16,7 @@ html {
 
 body {
   height: 100dvh;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #root {
@@ -147,12 +148,14 @@ body {
   line-clamp: 1;
 }
 
-.ql-editor {
+
+
+/* .ql-editor {
   min-height: 200px;
-}
+} */
 
 /* ANCHOR align */
-.ql-align-right {
+/* .ql-align-right {
   text-align: right;
 }
 
@@ -162,10 +165,10 @@ body {
 
 .ql-align-justify {
   text-align: justify;
-}
+} */
 
 /* ANCHOR indent */
-.ql-indent-1 {
+/* .ql-indent-1 {
   padding-left: 40px;
 }
 
@@ -187,7 +190,7 @@ body {
 
 .ql-indent-6 {
   padding-left: 240px;
-}
+} */
 
 /* ANCHOR blog-content */
 .cs-blog-content {

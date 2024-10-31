@@ -1,5 +1,4 @@
 import FloatCircularIndicator from "@/components/FloatCircularIndicator";
-import { validateMessage } from "@/lib/rule";
 import { useLoginMutation } from "@/service/extended/authApi";
 import { setUserAndToken } from "@/service/token";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
@@ -29,7 +28,6 @@ const Login = () => {
           width: 360,
         }}
         onFinish={onFinish}
-        validateMessages={validateMessage}
       >
         <Title level={3} style={{ marginBottom: 20 }}>
           Login

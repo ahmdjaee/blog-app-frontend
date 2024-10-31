@@ -3,7 +3,6 @@ import PreviewPost from "@/components/PreviewPost";
 import SubmitButton from "@/components/SubmitButton";
 import { useAuth } from "@/hooks/useAuth";
 import useSlug from "@/hooks/useSlug";
-import { validateMessage } from "@/lib/rule";
 import { useGetCategoryQuery } from "@/service/extended/categoryApi";
 import { useCreatePostMutation } from "@/service/extended/postApi";
 import { InfoCircleOutlined, UploadOutlined } from "@ant-design/icons";
@@ -18,7 +17,6 @@ import {
   Tabs,
   Upload,
 } from "antd";
-import "quill/dist/quill.snow.css";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -111,7 +109,6 @@ function CreatePostForm({ html, form, getThumbnail, onRemove }) {
       <Form
         onFinish={onFinish}
         form={form}
-        validateMessages={validateMessage}
         name="create-category"
         layout="vertical"
         autoComplete="off"

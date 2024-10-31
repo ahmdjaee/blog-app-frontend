@@ -4,6 +4,8 @@ import { Provider } from "react-redux";
 import App from "./App.jsx";
 import "./index.css";
 import "./ant-style.css";
+import "./quil-js.css";
+
 import { store } from "./redux/store.js";
 
 createRoot(document.getElementById("root")).render(

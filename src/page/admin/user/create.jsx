@@ -1,6 +1,5 @@
 import SubmitButton from "@/components/SubmitButton";
 import useSlug from "@/hooks/useSlug";
-import { validateMessage } from "@/lib/rule";
 import { useCreateUserMutation } from "@/service/extended/userApi";
 import { Button, Drawer, Form, Input, Select, Space, Spin } from "antd";
 import { useEffect } from "react";
@@ -35,7 +34,6 @@ function CreateUserForm({ open, onClose }) {
           name="create-user"
           layout="vertical"
           autoComplete="off"
-          validateMessages={validateMessage}
         >
           <Form.Item
             name="name"

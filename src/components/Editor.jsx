@@ -1,7 +1,7 @@
 import Quill from "quill";
 import { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
+import "quill/dist/quill.snow.css";
 
-// Editor is an uncontrolled React component
 const Editor = forwardRef(
   (
     { readOnly, defaultValue, onTextChange, onSelectionChange, placeholder },

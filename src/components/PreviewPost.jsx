@@ -17,7 +17,7 @@ function PreviewPost({ title, thumbnail, content, author, published_at = "2 week
         style={{ width: "100%", maxHeight: 500, objectFit: "contain" }}
       />
       <section style={{ marginBlock: 20 }}>
-        <Typography.Title level={4} style={{fontWeight: "600"}}>{title}</Typography.Title>
+        <Typography.Title level={5} style={{fontWeight: "700"}}>{title}</Typography.Title>
         <Typography.Text>By : <a href="">{author}</a> | Published : {published_at}</Typography.Text>
       </section>
       <article

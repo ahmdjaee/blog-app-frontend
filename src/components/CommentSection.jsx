@@ -30,6 +30,7 @@ import {
 import TextArea from "antd/es/input/TextArea";
 import { Fragment, useEffect, useState } from "react";
 
+// ANCHOR CommentSection
 const CommentSection = ({ post = {} }) => {
   const {
     data: comments,
@@ -180,56 +181,7 @@ function CommentCard({
   );
 }
 
-// function NestedReply({ replies, commentId, post }) {
-//   if (replies) {
-//     return replies?.map((reply) => (
-//       <Flex gap={16} style={{ marginLeft: 28 }} key={reply?.id}>
-//         <Card
-//           key={reply?.id}
-//           styles={{
-//             actions: {
-//               border: "none",
-//             },
-//             body: {
-//               paddingTop: 16,
-//               paddingBottom: 8,
-//             },
-//           }}
-//           actions={[
-//             <CommentActions
-//               key={reply?.id}
-//               commentId={commentId}
-//               user={reply?.user}
-//               post={post}
-//               totalLikes={reply?.likes}
-//             />,
-//           ]}
-//           style={{
-//             flex: 1,
-//           }}
-//         >
-//           <Card.Meta
-//             avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
-//             title={
-//               <Space>
-//                 {reply?.user?.name}
-//                 <Typography.Text
-//                   type="secondary"
-//                   style={{ fontSize: 12, fontWeight: 400 }}
-//                 >
-//                   {reply?.created_at}
-//                 </Typography.Text>
-//               </Space>
-//             }
-//             description={<p>{reply?.content}</p>}
-//           />
-//         </Card>
-//       </Flex>
-//     ));
-//   }
-// }
-
-// ANCHOR Comment Actions
+// ANCHOR CommentActions
 function CommentActions({
   commentId,
   parentId,

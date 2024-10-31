@@ -42,7 +42,7 @@ const MainLayout = () => {
       icon: <HomeOutlined />,
     },
     {
-      key: "/posts/bookmark", 
+      key: "/posts/bookmark",
       label: "Bookmark",
       icon: <BookOutlined />,
     },

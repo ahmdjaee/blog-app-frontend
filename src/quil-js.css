@@ -1,0 +1,130 @@
+/* Wrapper dasar untuk konten di dalam cs-blog-content */
+.cs-blog-content {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: pre-wrap;
+    /* padding: 15px; */
+}
+
+/* Styling khusus untuk elemen code block */
+.cs-blog-content pre {
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 12px;
+    border-radius: 4px;
+    font-family: Consolas, Monaco, monospace;
+    overflow-x: auto;
+    font-size: 0.9em;
+    margin: 1em 0;
+}
+
+/* Heading */
+.cs-blog-content h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0.5em 0;
+}
+
+.cs-blog-content h2 {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin: 0.5em 0;
+}
+
+.cs-blog-content h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0.5em 0;
+}
+
+.cs-blog-content h4 {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin: 0.5em 0;
+}
+
+/* List styling */
+.cs-blog-content ul,
+.cs-blog-content ol {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+.cs-blog-content ul {
+    list-style-type: disc;
+}
+
+.cs-blog-content ol {
+    list-style-type: decimal;
+}
+
+.cs-blog-content li {
+    margin-bottom: 0.5em;
+}
+
+/* Blockquote */
+.cs-blog-content blockquote {
+    border-left: 4px solid #ddd;
+    padding-left: 16px;
+    margin: 1em 0;
+    color: #666;
+    font-style: italic;
+}
+
+/* Image */
+.cs-blog-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+/* Links */
+.cs-blog-content a {
+    color: #007bff;
+    text-decoration: underline;
+    transition: color 0.2s ease-in-out;
+}
+
+.cs-blog-content a:hover {
+    color: #0056b3;
+}
+
+/* Bold, Italic, Underline, Strike */
+.cs-blog-content strong {
+    font-weight: bold;
+}
+
+.cs-blog-content em {
+    font-style: italic;
+}
+
+.cs-blog-content u {
+    text-decoration: underline;
+}
+
+.cs-blog-content s {
+    text-decoration: line-through;
+}
+
+/* Additional text formatting for code */
+.cs-blog-content code {
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 0.9em;
+}
+
+.ql-editor {
+  min-height: 200px;
+}
+
+.ql-editor img {
+    max-height: 300px;
+}

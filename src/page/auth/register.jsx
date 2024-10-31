@@ -1,5 +1,4 @@
 import FloatCircularIndicator from "@/components/FloatCircularIndicator";
-import { validateMessage } from "@/lib/rule";
 import { useRegisterMutation } from "@/service/extended/authApi";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
@@ -24,7 +23,6 @@ const Register = () => {
           width: 360,
         }}
         onFinish={onFinish}
-        validateMessages={validateMessage}
       >
         <Title level={4} style={{ marginBottom: 20 }}>
           Register

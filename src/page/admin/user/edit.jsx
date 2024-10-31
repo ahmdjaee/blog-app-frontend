@@ -1,5 +1,4 @@
 import SubmitButton from "@/components/SubmitButton";
-import { validateMessage } from "@/lib/rule";
 import { useUpdateUserMutation } from "@/service/extended/userApi";
 import { Button, Drawer, Form, Input, Select, Space, Spin } from "antd";
 import { useEffect } from "react";
@@ -32,7 +31,6 @@ function UpdateUserForm({ open, onClose, data }) {
           name="edit-user"
           layout="vertical"
           autoComplete="off"
-          validateMessages={validateMessage}
         >
           <Form.Item
             name="name"

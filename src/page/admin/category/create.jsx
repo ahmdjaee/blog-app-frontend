@@ -1,6 +1,5 @@
 import SubmitButton from "@/components/SubmitButton";
 import useSlug from "@/hooks/useSlug";
-import { validateMessage } from "@/lib/rule";
 import { useCreateCategoryMutation } from "@/service/extended/categoryApi";
 import { Button, Drawer, Form, Input, Space, Spin } from "antd";
 import { useEffect } from "react";
@@ -35,7 +34,6 @@ function CreateCategoryForm({ open, onClose }) {
           name="create-category"
           layout="vertical"
           autoComplete="off"
-          validateMessages={validateMessage}
         >
           <Form.Item
             name="name"

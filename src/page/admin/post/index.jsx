@@ -14,7 +14,6 @@ import {
   Tooltip,
   Typography,
 } from "antd";
-import "quill/dist/quill.snow.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 const { Search } = Input;

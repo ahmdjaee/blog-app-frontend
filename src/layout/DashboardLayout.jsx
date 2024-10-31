@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   AppstoreAddOutlined,
   BarChartOutlined,
+  BarsOutlined,
   CloudOutlined,
   CommentOutlined,
   MenuFoldOutlined,
@@ -79,10 +80,10 @@ const DashboardLayout = () => {
   const { lg, sm } = useBreakpoint();
   const [collapsed, setCollapsed] = React.useState(true);
   const [modal, contextHolder] = Modal.useModal();
-  
+
   const onClickMenu = (e) => {
     navigate(e.key);
-    if (!lg){
+    if (!lg) {
       setCollapsed(true);
     }
   };
@@ -146,22 +147,16 @@ const DashboardLayout = () => {
         >
           {collapsed && (
             <Button
-              type="text"
               icon={<MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-                // display: !collapsed && "none"
-              }}
+              style={{ marginRight: "16px" }}
             />
           )}
-          
-          <Logo style={{marginRight: "auto"}} />
+
+          <Logo style={{ marginRight: "auto" }} />
 
           <ProfileButton />
-          
+
           {contextHolder}
         </Header>
 

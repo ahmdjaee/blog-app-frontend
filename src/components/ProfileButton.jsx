@@ -1,19 +1,15 @@
 import { useAuth } from "@/hooks/useAuth";
 import { removeAuth } from "@/redux/authSlice";
 import { useLogoutMutation } from "@/service/extended/authApi";
+import { useUpdateUserMutation } from "@/service/extended/userApi";
 import { removeUserAndToken } from "@/service/token";
 import {
   ExclamationCircleFilled,
   LogoutOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Dropdown, Grid, Modal } from "antd";
+import { Avatar, Dropdown, Form, Grid, Input, Modal, Spin } from "antd";
 import { useDispatch } from "react-redux";
-import SubmitButton from "@/components/SubmitButton";
-import { validateMessage } from "@/lib/rule";
-import { useUpdateUserMutation } from "@/service/extended/userApi";
-import { Button, Drawer, Form, Input, Select, Space, Spin } from "antd";
-import { useEffect } from "react";
 
 const { confirm } = Modal;
 
@@ -59,7 +55,6 @@ function ProfileButton({ style }) {
                 name="edit-user"
                 layout="vertical"
                 autoComplete="off"
-                validateMessages={validateMessage}
                 initialValues={user}
               >
                 <Form.Item
