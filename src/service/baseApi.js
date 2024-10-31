@@ -7,15 +7,36 @@ import { getCurrentUserAndToken, removeUserAndToken } from "./token";
 export const handleResponse = (api) => (next) => (action) => {
   if (isFulfilled(action)) {
     const type = action?.meta?.arg?.type;
-
-    switch (type) {
-      case "mutation": {
-        notification.success({
-          message: "Success",
-          description: action?.payload?.message,
-        });
+    const endpoints = action?.meta?.arg?.endpointName
+    
+    if (type === "mutation") {
+      switch (endpoints) {
+        case "likeComment": {
+          break;
+        }
+        default: {
+          notification.success({
+            message: "Success",
+            description: action?.payload?.message,
+          });
+        }
       }
     }
+
+    // switch (endpoints) {
+    //   case "likeComment": {
+    //     return
+    //   }
+    // }
+
+    // switch (type) {
+    //   case "mutation": {
+    //     notification.success({
+    //       message: "Success",
+    //       description: action?.payload?.message,
+    //     });
+    //   }
+    // }
   }
 
   if (isRejectedWithValue(action)) {
@@ -72,6 +93,8 @@ export const baseApi = createApi({
       const token = getCurrentUserAndToken()?.token;
 
       headers.set("Accept", "application/json");
+      headers.set("ngrok-skip-browser-warning", "true");
+
       if (token) headers.set("Authorization", `Bearer ${token}`);
 
       return headers;

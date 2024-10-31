@@ -76,12 +76,15 @@ const DashboardLayout = () => {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { lg } = useBreakpoint();
+  const { lg, sm } = useBreakpoint();
   const [collapsed, setCollapsed] = React.useState(true);
   const [modal, contextHolder] = Modal.useModal();
   
   const onClickMenu = (e) => {
     navigate(e.key);
+    if (!lg){
+      setCollapsed(true);
+    }
   };
 
   useEffect(() => {
@@ -121,7 +124,7 @@ const DashboardLayout = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["4"]}
-          items={user.role === "admin" ? itemsAdmin : itemsUser}
+          items={user?.role === "admin" ? itemsAdmin : itemsUser}
         />
       </Sider>
       <Layout
@@ -170,7 +173,7 @@ const DashboardLayout = () => {
         >
           <div
             style={{
-              padding: 24,
+              padding: sm ? 24 : 16,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
               overflowX: "auto",

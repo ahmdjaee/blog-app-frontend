@@ -23,6 +23,7 @@ import MainLayout from "@/layout/MainLayout";
 import UserDashboard from "@/page/user/dashboard";
 import UserPostPanel from "@/page/user/post";
 import TabLayout from "@/layout/TabLayout";
+import Bookmark from "@/page/bookmark";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -58,7 +59,7 @@ export const router = createBrowserRouter(
           <Route path="posts/category/:category" element={<PostByCategory />} />
         </Route>
         <Route path="posts/search" element={<PostSearch />} />
-        <Route path="posts/bookmark" element={<PostSearch />} />
+        <Route path="posts/bookmark" element={<Bookmark />} />
         <Route path="posts/:slug" element={<PostDetail />} />
       </Route>
 

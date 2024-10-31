@@ -1,10 +1,12 @@
-function PreviewPost({ title, thumbnail, content, author }) {
+import { Typography } from "antd";
+
+function PreviewPost({ title, thumbnail, content, author, published_at = "2 weeks ago" }) {
   return (
     <div
       style={{
         maxWidth: "800px",
         margin: "0 auto",
-        borderInline: "1px solid #f0f1f2",
+        // borderInline: "1px solid #f0f1f2",
         paddingInline: 16,
         boxSizing: "content-box",
       }}
@@ -15,8 +17,8 @@ function PreviewPost({ title, thumbnail, content, author }) {
         style={{ width: "100%", maxHeight: 500, objectFit: "contain" }}
       />
       <section style={{ marginBlock: 20 }}>
-        <h3>{title}</h3>
-        <p>Oleh: {author} | Dipublikasikan: 16 Oktober 2024</p>
+        <Typography.Title level={4} style={{fontWeight: "600"}}>{title}</Typography.Title>
+        <Typography.Text>By : <a href="">{author}</a> | Published : {published_at}</Typography.Text>
       </section>
       <article
         className="cs-blog-content"

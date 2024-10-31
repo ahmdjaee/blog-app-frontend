@@ -86,12 +86,13 @@ const PostPanel = () => {
       title: "Author",
       dataIndex: "author",
       key: "author",
+      render: (author) => <>{author?.name}</>,
     },
     {
       title: "Category",
       dataIndex: "category",
       key: "category",
-      render: (_, record) => <Text type="success">{record.category}</Text>,
+      render: (category) => <Text type="success">{category?.name}</Text>,
     },
     {
       title: "Published",
@@ -129,7 +130,7 @@ const PostPanel = () => {
           <Popconfirm
             title="Are you sure to delete this post?"
             placement="topLeft"
-            onConfirm={() => handleDelete(record.key)}
+            onConfirm={() => handleDelete(record.id)}
           >
             <Button size="small" color="danger" variant="text">
               <DeleteOutlined />
@@ -140,16 +141,7 @@ const PostPanel = () => {
     },
   ];
 
-  const dataSource = list?.data.map((post) => ({
-    ...post,
-    key: post.id,
-    category: post.category.name,
-    category_id: post.category.id,
-    author: post.author.name,
-    author_id: post.author.id,
-  }));
-
-
+  const dataSource = list?.data.map((post) => post);
 
   return (
     <>

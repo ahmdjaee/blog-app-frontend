@@ -22,8 +22,8 @@ function ListPost({ onLoadMore, params = {}, title = "Latest Posts" }) {
         {title && <p className="cs-banner-title">{title}</p>}
         <Row
           gutter={[
-            { xs: 8, sm: 16, md: 24, lg: 24 },
-            { xs: 8, sm: 16, md: 24, lg: 24 },
+            { xs: 8, sm: 16, md: 16, lg: 20 },
+            { xs: 8, sm: 16, md: 16, lg: 20 },
           ]}
           justify={"start"}
         >

@@ -2,10 +2,10 @@ import { Flex, Image, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 const { Text, Title } = Typography;
 
-function PostCard({ post }) {
+function PostCard({ post = {} , style }) {
   const navigate = useNavigate();
   return (
-    <div className="cs-card">
+    <div className="cs-card" style={style}>
       <Image
         width={100}
         height={100}
@@ -22,11 +22,11 @@ function PostCard({ post }) {
         flex={1}
         onClick={() => navigate(`/posts/${post.slug}`, { state: { post } })}
       >
-        <Title level={5} style={{ marginBottom: 5 }} ellipsis={{ rows: 3 }}>
+        <Title level={5} style={{ marginBottom: 16 }} ellipsis={{ rows: 3 }}>
           {post.title}
         </Title>
         <Flex justify="space-between"  style={{ marginTop: "auto" }}>
-          <Text type="success" >
+          <Text type="success" className="cs-ellipsis-1" style={{marginRight: 8}} >
             {post.category.name}
           </Text>
           <Text style={{ textWrap: "nowrap" }}>{post.published_at}</Text>

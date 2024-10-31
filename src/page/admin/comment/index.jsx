@@ -1,18 +1,15 @@
 import useDebounced from "@/hooks/useDebounce";
 import { SEARCH_TIMEOUT } from "@/lib/settings";
-import { useDeleteCommentMutation, useGetCommentsQuery } from "@/service/extended/commentApi";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  useDeleteCommentMutation,
+  useGetCommentsQuery,
+} from "@/service/extended/commentApi";
+import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Flex, Input, Popconfirm, Space, Spin, Table } from "antd";
 import { useState } from "react";
-import CreateCommentForm from "./create";
-import UpdatePostForm from "./edit";
 const { Search } = Input;
 
 function CommentPanel() {
-  const [openCreate, setOpenCreate] = useState(false);
-  const [openUpdate, setOpenUpdate] = useState(false);
-  const [comment, setComment] = useState({});
-  
   const [params, setParams] = useState({
     keyword: "",
     page: 1,
@@ -35,24 +32,6 @@ function CommentPanel() {
     setParams({ ...params, keyword: e.target.value });
   }, SEARCH_TIMEOUT);
 
-  const showCreateDrawer = () => {
-    setOpenCreate(true);
-  };
-
-  const showUpdateDrawer = (record) => {
-    setComment(record);
-    setOpenUpdate(true);
-  };
-
-  const onCloseCreate = () => {
-    setOpenCreate(false);
-  };
-
-  const onCloseUpdate = () => {
-    setComment({});
-    setOpenUpdate(false);
-  };
-
   const columns = [
     {
       title: "User",
@@ -70,15 +49,6 @@ function CommentPanel() {
       align: "right",
       render: (_, record) => (
         <Space size="small">
-          <Button
-            size="small"
-            variant="text"
-            color="primary"
-            onClick={() => showUpdateDrawer(record)}
-          >
-            <EditOutlined />
-          </Button>
-
           <Popconfirm
             title="Are you sure to delete this comment?"
             placement="topLeft"
@@ -101,10 +71,7 @@ function CommentPanel() {
 
   return (
     <>
-      <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={showCreateDrawer}>
-          Create Comment
-        </Button>
+      <Flex justify="end" align="center" style={{ marginBottom: 16 }}>
         <Search
           placeholder="input search text"
           allowClear
@@ -130,10 +97,7 @@ function CommentPanel() {
             });
           }}
         />
-        ;
       </Spin>
-      <CreateCommentForm open={openCreate} onClose={onCloseCreate} />
-      <UpdatePostForm open={openUpdate} onClose={onCloseUpdate} data={comment} />
     </>
   );
 }

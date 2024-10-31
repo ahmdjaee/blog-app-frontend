@@ -11,7 +11,7 @@ function PostDetailPanel() {
   });
 
   const post = data?.data;
-  
+
   return (
     <>
       {(isLoading, isFetching) ? (
@@ -22,12 +22,7 @@ function PostDetailPanel() {
           <Skeleton />
         </Flex>
       ) : (
-        <PreviewPost
-          title={post?.title}
-          thumbnail={post?.thumbnail}
-          content={post?.content}
-          author={post?.author.name}
-        />
+        <PreviewPost {...post} author={post?.author.name} />
       )}
 
       <section style={{ marginBlock: 64, maxWidth: 800, marginInline: "auto" }}>

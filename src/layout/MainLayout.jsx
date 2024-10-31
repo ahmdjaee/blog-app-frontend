@@ -110,7 +110,7 @@ const MainLayout = () => {
           {location.pathname !== "/" && !lg && (
             <ArrowLeftOutlined onClick={() => navigate(-1)} />
           )}
-          {md && <Logo style={{ fontSize: 24, marginRight: "auto" }} />}
+          {md && <Logo style={{ fontSize: 20, marginRight: "auto" }} />}
 
           <ProfileButton
             style={{

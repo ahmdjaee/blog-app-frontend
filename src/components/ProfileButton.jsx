@@ -50,7 +50,7 @@ function ProfileButton({ style }) {
       case "profile":
         confirm({
           title: "Profile",
-          icon: <UserOutlined style={{ color: "#096dd9" }} />,
+          icon: null,
           content: (
             <Spin spinning={isLoading}>
               <Form
@@ -60,30 +60,31 @@ function ProfileButton({ style }) {
                 layout="vertical"
                 autoComplete="off"
                 validateMessages={validateMessage}
+                initialValues={user}
               >
                 <Form.Item
                   name="name"
                   label="Name"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //   },
+                  // ]}
                 >
-                  <Input placeholder="Insert user name" />
+                  <Input required readOnly placeholder="Insert user name" />
                 </Form.Item>
                 <Form.Item
                   name="email"
                   label="Email"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //   },
+                  // ]}
                 >
-                  <Input type="email" placeholder="Email" />
+                  <Input required readOnly type="email" placeholder="Email" />
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
                   name="old_password"
                   label="Old Password"
                   rules={[
@@ -105,8 +106,8 @@ function ProfileButton({ style }) {
                   ]}
                 >
                   <Input.Password placeholder="Password" />
-                </Form.Item>
-                <Form.Item
+                </Form.Item> */}
+                {/* <Form.Item
                   label="Role"
                   name="role"
                   hasFeedback
@@ -119,12 +120,13 @@ function ProfileButton({ style }) {
                   <Select
                     placeholder="Select role"
                     allowClear
+                    readOnly
                     options={[
                       { label: "Admin", value: "admin" },
                       { label: "User", value: "user" },
                     ]}
                   />
-                </Form.Item>
+                </Form.Item> */}
                 {/* <Form.Item>
                   <Space>
                     <SubmitButton form={form}>Submit</SubmitButton>

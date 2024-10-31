@@ -2,35 +2,56 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   useDeleteCommentMutation,
   useGetCommentByPostQuery,
+  useLikeCommentMutation,
   useSendCommentMutation,
 } from "@/service/extended/commentApi";
-import { DeleteOutlined, MessageOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LikeOutlined,
+  MessageOutlined,
+  MoreOutlined,
+  RedoOutlined,
+} from "@ant-design/icons";
 import {
   Avatar,
   Button,
   Card,
+  Dropdown,
   Empty,
   Flex,
   Form,
+  Grid,
+  message,
   Popconfirm,
   Skeleton,
-  Space,
   Typography,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { Fragment, useEffect, useState } from "react";
 
 const CommentSection = ({ post = {} }) => {
-  const { data: comments, isLoading: isListLoading } = useGetCommentByPostQuery(
-    post?.id,
-    {
-      pollingInterval: 30000,
-    }
-  );
+  const {
+    data: comments,
+    isLoading: isListLoading,
+    isFetching: isListFetching,
+    refetch,
+  } = useGetCommentByPostQuery(post?.id, {
+    pollingInterval: 30000,
+  });
 
   const [sendComment, { isLoading }] = useSendCommentMutation();
+
   const onFinish = async (values) => {
     await sendComment({ post_id: post?.id, ...values });
+  };
+
+  const handleRefetch = () => {
+    refetch()
+      .unwrap()
+      .then(() => {
+        message.success("Comment is up to date");
+      });
   };
 
   return (
@@ -44,7 +65,16 @@ const CommentSection = ({ post = {} }) => {
           Submit
         </Button>
       </Form>
-      <h3 style={{ marginBlock: 16 }}>Comments ({comments?.meta?.total})</h3>
+      <Flex align="center" justify="space-between">
+        <h3 style={{ marginBlock: 16 }}>Comments ({comments?.meta?.total})</h3>
+        <Button
+          loading={isListFetching}
+          icon={<RedoOutlined />}
+          onClick={handleRefetch}
+        >
+          Refresh
+        </Button>
+      </Flex>
       {isListLoading ? (
         <Skeleton />
       ) : comments?.data?.length === 0 ? (
@@ -52,55 +82,17 @@ const CommentSection = ({ post = {} }) => {
       ) : (
         comments?.data?.map((comment) => (
           <Fragment key={comment?.id}>
-            <Card
-              styles={{
-                actions: {
-                  border: "none",
-                  backgroundColor: "#F8F8F8",
-                  position: "relative",
-                },
-                body: {
-                  paddingTop: 16,
-                  paddingBottom: 8,
-                  backgroundColor: "#F8F8F8",
-                },
-              }}
-              actions={[
-                <CommentActions
-                  key={comment?.id}
-                  commentId={comment?.id}
-                  totalReply={comment?.replies?.length}
-                  user={comment?.user}
+            <CommentCard comment={comment} post={post} />
+            {comment?.replies?.map((reply) => (
+              <div key={reply?.id} style={{ paddingLeft: 28 }}>
+                <CommentCard
+                  comment={reply}
+                  parentId={comment?.id}
                   post={post}
-                />,
-              ]}
-              style={{
-                minWidth: 300,
-              }}
-            >
-              <Card.Meta
-                avatar={
-                  <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
-                }
-                title={
-                  <Space>
-                    {comment?.user?.name}
-                    <Typography.Text
-                      type="secondary"
-                      style={{ fontSize: 12, fontWeight: 400 }}
-                    >
-                      {comment?.created_at}
-                    </Typography.Text>
-                  </Space>
-                }
-                description={<p>{comment?.content}</p>}
-              />
-            </Card>
-            <NestedReply
-              replies={comment?.replies}
-              commentId={comment?.id}
-              post={post}
-            />
+                  backgroundColor="white"
+                />
+              </div>
+            ))}
           </Fragment>
         ))
       )}
@@ -108,68 +100,170 @@ const CommentSection = ({ post = {} }) => {
   );
 };
 
-function NestedReply({ replies, commentId, post }) {
-  if (replies) {
-    return replies?.map((reply) => (
-      <Flex gap={16} style={{ marginLeft: 28 }} key={reply?.id}>
-        <Card
-          key={reply?.id}
-          styles={{
-            actions: {
-              border: "none",
-            },
-            body: {
-              paddingTop: 16,
-              paddingBottom: 8,
-            },
-          }}
-          actions={[
-            <CommentActions
-              key={reply?.id}
-              commentId={commentId}
-              user={reply?.user}
-              post={post}
-            />,
-          ]}
-          style={{
-            flex: 1,
-          }}
-        >
-          <Card.Meta
-            avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
-            title={
-              <Space>
-                {reply?.user?.name}
-                <Typography.Text
-                  type="secondary"
-                  style={{ fontSize: 12, fontWeight: 400 }}
-                >
-                  {reply?.created_at}
-                </Typography.Text>
-              </Space>
-            }
-            description={<p>{reply?.content}</p>}
-          />
-        </Card>
-      </Flex>
-    ));
-  }
-}
-
-function CommentActions({ commentId, totalReply, user = {}, post = {} }) {
-  const [show, setShow] = useState(false);
+// ANCHOR CommentCard
+function CommentCard({
+  comment = {},
+  post = {},
+  actionStyle = {},
+  bodyStyle = {},
+  parentId,
+  backgroundColor = "#F8F8F8",
+}) {
   const authUser = useAuth();
 
+  return (
+    <Card
+      className="border-none"
+      styles={{
+        actions: {
+          border: "none",
+          backgroundColor: backgroundColor,
+          position: "relative",
+          ...actionStyle,
+        },
+        body: {
+          paddingTop: 16,
+          paddingBottom: 8,
+          backgroundColor: backgroundColor,
+          ...bodyStyle,
+        },
+      }}
+      actions={[
+        <CommentActions
+          key={comment?.id}
+          commentId={comment?.id}
+          parentId={parentId}
+          totalReply={comment?.replies?.length}
+          user={comment?.user}
+          post={post}
+          totalLikes={comment?.likes}
+          liked={comment?.liked}
+        />,
+      ]}
+      style={{
+        minWidth: 300,
+      }}
+    >
+      <Card.Meta
+        avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
+        title={
+          <Flex align="end" gap={8}>
+            {comment?.user?.name}
+            <Typography.Text
+              type="secondary"
+              style={{ fontSize: 12, fontWeight: 400 }}
+            >
+              {comment?.created_at}
+            </Typography.Text>
+            {authUser?.id === comment?.user?.id && (
+              <Dropdown
+                placement="bottomRight"
+                menu={{
+                  items: [
+                    {
+                      key: "edit",
+                      label: "Edit",
+                      icon: <EditOutlined />,
+                    },
+                  ],
+                }}
+                trigger={["click"]}
+              >
+                <MoreOutlined style={{ marginLeft: "auto" }} />
+              </Dropdown>
+            )}
+          </Flex>
+        }
+        description={<p>{comment?.content}</p>}
+      />
+    </Card>
+  );
+}
+
+// function NestedReply({ replies, commentId, post }) {
+//   if (replies) {
+//     return replies?.map((reply) => (
+//       <Flex gap={16} style={{ marginLeft: 28 }} key={reply?.id}>
+//         <Card
+//           key={reply?.id}
+//           styles={{
+//             actions: {
+//               border: "none",
+//             },
+//             body: {
+//               paddingTop: 16,
+//               paddingBottom: 8,
+//             },
+//           }}
+//           actions={[
+//             <CommentActions
+//               key={reply?.id}
+//               commentId={commentId}
+//               user={reply?.user}
+//               post={post}
+//               totalLikes={reply?.likes}
+//             />,
+//           ]}
+//           style={{
+//             flex: 1,
+//           }}
+//         >
+//           <Card.Meta
+//             avatar={<Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />}
+//             title={
+//               <Space>
+//                 {reply?.user?.name}
+//                 <Typography.Text
+//                   type="secondary"
+//                   style={{ fontSize: 12, fontWeight: 400 }}
+//                 >
+//                   {reply?.created_at}
+//                 </Typography.Text>
+//               </Space>
+//             }
+//             description={<p>{reply?.content}</p>}
+//           />
+//         </Card>
+//       </Flex>
+//     ));
+//   }
+// }
+
+// ANCHOR Comment Actions
+function CommentActions({
+  commentId,
+  parentId,
+  totalReply,
+  user = {},
+  post = {},
+  totalLikes = 0,
+  liked = false,
+}) {
+  const [show, setShow] = useState(false);
+  // const [isLiked, setIsLiked] = useState(liked);
+  const authUser = useAuth();
+  const { md } = Grid.useBreakpoint();
+
   const [deleteComment] = useDeleteCommentMutation();
+  const [likeComment] = useLikeCommentMutation();
   const [sendComment, { isLoading: isReplyLoading, isSuccess: isReplySuccess }] =
     useSendCommentMutation();
 
   const handleReply = async (value) => {
-    await sendComment({ post_id: post?.id, ...value, parent_id: commentId });
+    await sendComment({
+      post_id: post?.id,
+      ...value,
+      parent_id: parentId || commentId,
+    });
   };
 
   const handleDelete = async () => {
     await deleteComment(commentId);
+  };
+
+  const handleLikes = async () => {
+    // setIsLiked(!isLiked);
+    await likeComment(commentId);
   };
 
   useEffect(() => {
@@ -193,9 +287,18 @@ function CommentActions({ commentId, totalReply, user = {}, post = {} }) {
             {totalReply} replies
           </p>
         )}
+
+        <Button
+          variant="text"
+          onClick={handleLikes}
+          color={liked ? "primary" : "default"}
+        >
+          <LikeOutlined />
+          {totalLikes}
+        </Button>
         <Button type="text" onClick={() => setShow(true)}>
           <MessageOutlined />
-          Reply
+          {md && "Reply"}
         </Button>
         {(authUser?.role === "admin" ||
           authUser?.id === user?.id ||
@@ -207,7 +310,7 @@ function CommentActions({ commentId, totalReply, user = {}, post = {} }) {
           >
             <Button variant="text" color="danger">
               <DeleteOutlined />
-              Delete
+              {md && "Delete"}
             </Button>
           </Popconfirm>
         )}

@@ -46,9 +46,17 @@ body {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   padding: 16px;
   border-radius: 10px;
+  height: 100%;
   display: flex;
   gap: 16px;
   cursor: pointer;
+}
+
+.cs-card-wrapper {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 16px;
+  border-radius: 10px;
+  background: white;
 }
 
 /* ANCHOR banner */
@@ -122,12 +130,21 @@ body {
   }
 }
 
+
 .cs-ellipsis {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
+}
+
+.cs-ellipsis-1 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
 }
 
 .ql-editor {

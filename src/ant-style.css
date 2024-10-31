@@ -12,6 +12,30 @@
     text-wrap: nowrap;
 }
 
-.ant-card-bordered {
+.ant-card-bordered.border-none {
     border: none;
+}
+
+.ant-card-actions li span div {
+    cursor: default;
+}
+
+.login-modal {
+    max-width: 400;
+    min-width: 250px;
+    width: "100%";
+}
+
+@media screen and (max-width: 576px) {
+    .login-modal {
+        max-width: 250px;
+    }
+
+    .ant-result {
+        padding-inline: 0;
+    }
+
+    .ant-result-image svg {
+        width: 100%;
+    }
 }

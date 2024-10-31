@@ -22,9 +22,7 @@ const PostDetail = () => {
         </Flex>
       ) : (
         <PreviewPost
-          title={post?.title}
-          thumbnail={post?.thumbnail}
-          content={post?.content}
+          {...post}
           author={post?.author.name}
         />
       )}

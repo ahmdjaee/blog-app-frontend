@@ -1,4 +1,4 @@
-import { LinkToLogin } from "@/components/LinkToLogin";
+import { loginModal } from "@/components/LoginModal";
 import { notification } from "antd";
 
 export function errorHandler(response) {
@@ -9,11 +9,7 @@ export function errorHandler(response) {
     });
     return response?.data;
   } else if (response?.status === 401) {
-    notification.error({
-      message: "Oops!, You are not logged in.",
-      description: "Please login to continue.",
-      btn: LinkToLogin,
-    });
+    loginModal();
     return response?.data;
   } else if (response?.status === 422) {
     if (response?.data?.message) {

@@ -46,6 +46,14 @@ const commentApi = baseApi.injectEndpoints({
       invalidatesTags: ["Comment"],
       transformErrorResponse: (response) => errorHandler(response),
     }),
+    likeComment: builder.mutation({
+      query: (id) => ({
+        url: `/comments/${id}/like`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Comment"],
+      transformErrorResponse: (response) => errorHandler(response),
+    }),
   }),
 });
 
@@ -56,4 +64,5 @@ export const {
   useCreateCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  useLikeCommentMutation
 } = commentApi;

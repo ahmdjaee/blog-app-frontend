@@ -17,7 +17,7 @@ const Login = () => {
       const { data } = await login(formData).unwrap();
       setUserAndToken(data);
       navigate(from, { replace: true });
-    } catch (error) {}
+    } catch {}
   };
 
   return (
