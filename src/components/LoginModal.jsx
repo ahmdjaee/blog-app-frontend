@@ -1,7 +1,6 @@
 import { Modal, Result } from "antd";
 
-export function loginModal() {
-
+export function showLoginModal() {
   const onOk = () => {
     window.history.pushState(
       { prevUrl: window.location.pathname },
@@ -14,16 +13,12 @@ export function loginModal() {
   return Modal.confirm({
     title: "Oops, You are not logged in",
     icon: null,
-    okButtonProps: {
-      htmlType: "submit",
-    },
     onOk: onOk,
     okText: "Go to Login",
     className: "login-modal",
-    
     content: (
       <Result
-        status="401"
+        status="403"
         // title="403"
         style={{ width: "inherit", paddingBlock: 20 }}
         subTitle="Please login to do this action"

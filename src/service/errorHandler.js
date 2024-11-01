@@ -1,4 +1,4 @@
-import { loginModal } from "@/components/LoginModal";
+import { showLoginModal } from "@/components/LoginModal";
 import { notification } from "antd";
 
 export function errorHandler(response) {
@@ -9,7 +9,7 @@ export function errorHandler(response) {
     });
     return response?.data;
   } else if (response?.status === 401) {
-    loginModal();
+    showLoginModal();
     return response?.data;
   } else if (response?.status === 422) {
     if (response?.data?.message) {
