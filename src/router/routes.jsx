@@ -24,6 +24,7 @@ import UserDashboard from "@/page/user/dashboard";
 import UserPostPanel from "@/page/user/post";
 import TabLayout from "@/layout/TabLayout";
 import Bookmark from "@/page/bookmark";
+import MustIsUser from "./MustIsUser";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,12 +45,14 @@ export const router = createBrowserRouter(
       </Route>
 
       <Route element={<RequireAuth />}>
-        <Route path="user" element={<DashboardLayout />}>
-          <Route path="dashboard" element={<UserDashboard />} />
-          <Route path="posts" element={<UserPostPanel />} />
-          <Route path="posts/create" element={<PostCreatePanel />} />
-          <Route path="posts/edit" element={<PostEditPanel />} />
-          <Route path="posts/:slug" element={<PostDetailPanel />} />
+        <Route element={<MustIsUser />}>
+          <Route path="user" element={<DashboardLayout />}>
+            <Route path="dashboard" element={<UserDashboard />} />
+            <Route path="posts" element={<UserPostPanel />} />
+            <Route path="posts/create" element={<PostCreatePanel />} />
+            <Route path="posts/edit" element={<PostEditPanel />} />
+            <Route path="posts/:slug" element={<PostDetailPanel />} />
+          </Route>
         </Route>
       </Route>
 

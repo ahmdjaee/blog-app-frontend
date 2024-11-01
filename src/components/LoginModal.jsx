@@ -23,7 +23,7 @@ export function loginModal() {
     
     content: (
       <Result
-        status="403"
+        status="401"
         // title="403"
         style={{ width: "inherit", paddingBlock: 20 }}
         subTitle="Please login to do this action"

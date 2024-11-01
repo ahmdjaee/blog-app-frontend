@@ -58,7 +58,10 @@ const CommentSection = ({ post = {} }) => {
   return (
     <>
       <Form name="comment-section" onFinish={onFinish}>
-        <h3>Leave a comment</h3>
+        <Typography.Title level={5} style={{ fontWeight: "700" }}>
+          Leave a comment
+        </Typography.Title>
+
         <Form.Item name="content" style={{ marginTop: 10 }}>
           <TextArea required rows={4} placeholder="Write your comment here" />
         </Form.Item>
@@ -67,7 +70,9 @@ const CommentSection = ({ post = {} }) => {
         </Button>
       </Form>
       <Flex align="center" justify="space-between">
-        <h3 style={{ marginBlock: 16 }}>Comments ({comments?.meta?.total})</h3>
+        <Typography.Title level={5} style={{ marginBlock: 16, fontWeight: "700" }}>
+          Comments ({comments?.meta?.total})
+        </Typography.Title>
         <Button
           loading={isListFetching}
           icon={<RedoOutlined />}

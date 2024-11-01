@@ -3,22 +3,20 @@ import { isFulfilled, isRejectedWithValue } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { notification } from "antd";
 import { getCurrentUserAndToken, removeUserAndToken } from "./token";
+import { successHandler } from "./successHandler";
 
 export const handleResponse = (api) => (next) => (action) => {
   if (isFulfilled(action)) {
     const type = action?.meta?.arg?.type;
-    const endpoints = action?.meta?.arg?.endpointName
-    
+    const endpoints = action?.meta?.arg?.endpointName;
+
     if (type === "mutation") {
       switch (endpoints) {
         case "likeComment": {
           break;
         }
         default: {
-          notification.success({
-            message: "Success",
-            description: action?.payload?.message,
-          });
+          successHandler(action?.payload);
         }
       }
     }

@@ -1,6 +1,6 @@
 /* Wrapper dasar untuk konten di dalam cs-blog-content */
 .cs-blog-content {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
     font-size: 16px;
     line-height: 1.6;
     color: #333;
@@ -122,9 +122,51 @@
 }
 
 .ql-editor {
-  min-height: 200px;
+    min-height: 200px;
 }
 
 .ql-editor img {
     max-height: 300px;
+}
+
+/* Alignment styling */
+.ql-align-left {
+    text-align: left;
+}
+
+.ql-align-center {
+    text-align: center;
+}
+
+.ql-align-right {
+    text-align: right;
+}
+
+.ql-align-justify {
+    text-align: justify;
+}
+
+/* Indentation */
+.ql-indent-1 {
+    padding-left: 40px;
+}
+
+.ql-indent-2 {
+    padding-left: 80px;
+}
+
+.ql-indent-3 {
+    padding-left: 120px;
+}
+
+.ql-indent-4 {
+    padding-left: 160px;
+}
+
+.ql-indent-5 {
+    padding-left: 200px;
+}
+
+.ql-indent-6 {
+    padding-left: 240px;
 }

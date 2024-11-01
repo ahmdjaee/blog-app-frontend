@@ -7,8 +7,8 @@ function PreviewPost({ title, thumbnail, content, author, published_at = "2 week
         maxWidth: "800px",
         margin: "0 auto",
         // borderInline: "1px solid #f0f1f2",
-        paddingInline: 16,
-        boxSizing: "content-box",
+        // paddingInline: 16,
+        // boxSizing: "content-box",
       }}
     >
       <img

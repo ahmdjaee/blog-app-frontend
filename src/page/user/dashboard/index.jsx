@@ -2,7 +2,16 @@ import PostCardPanel from "@/components/PostCardPanel";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetBaseQuery } from "@/service/baseApi";
 import { LoadingOutlined } from "@ant-design/icons";
-import { Col, Divider, Row, Skeleton, Spin, Statistic, Typography } from "antd";
+import {
+  Col,
+  Divider,
+  Empty,
+  Row,
+  Skeleton,
+  Spin,
+  Statistic,
+  Typography,
+} from "antd";
 
 function useGetSummary({ path }) {
   return useGetBaseQuery(
@@ -17,6 +26,7 @@ function UserDashboard() {
     data: list,
     isLoading,
     isFetching,
+    isError,
   } = useGetBaseQuery(
     {
       url: "/posts/popular",
@@ -107,6 +117,11 @@ function UserDashboard() {
       <Typography.Title level={4}>Your most popular posts</Typography.Title>
       {isLoading ? (
         <Skeleton />
+      ) : !list?.data || list?.data?.length === 0 || isError ? (
+        <Empty
+          description="You have no posts yet"
+          style={{ margin: "60px auto", overflowX: "clip" }}
+        />
       ) : (
         <Spin spinning={isFetching} indicator={<LoadingOutlined />}>
           {list?.data?.map((post, index) => (
