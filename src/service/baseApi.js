@@ -15,6 +15,9 @@ export const handleResponse = (api) => (next) => (action) => {
         case "likeComment": {
           break;
         }
+        case "likePost": {
+          break;
+        }
         default: {
           successHandler(action?.payload);
         }
@@ -91,7 +94,6 @@ export const baseApi = createApi({
       const token = getCurrentUserAndToken()?.token;
 
       headers.set("Accept", "application/json");
-      headers.set("ngrok-skip-browser-warning", "true");
 
       if (token) headers.set("Authorization", `Bearer ${token}`);
 
@@ -100,10 +102,9 @@ export const baseApi = createApi({
   }),
   endpoints: (builder) => ({
     getBase: builder.query({
-      query: ({ url, params }) => ({
-        url: url,
+      query: () => ({
+        url: "posts",
         method: "GET",
-        params: params,
       }),
     }),
   }),

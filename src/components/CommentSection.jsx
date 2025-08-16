@@ -57,7 +57,7 @@ const CommentSection = ({ post = {} }) => {
 
   return (
     <>
-      <Form name="comment-section" onFinish={onFinish}>
+      <Form name="comment-section" onFinish={onFinish} id="commentSectionForm">
         <Typography.Title level={5} style={{ fontWeight: "700" }}>
           Leave a comment
         </Typography.Title>

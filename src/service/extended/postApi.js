@@ -4,11 +4,19 @@ import { errorHandler } from "../errorHandler";
 
 export const postApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPost: builder.query({
-      query: (params) => ({
-        url: "/posts",
+    getPosts: builder.query({
+      query: (args) => ({
+        url: args.url ? `/posts/${args.url}` : "/posts",
         method: "GET",
-        params: params,
+        params:args?.params,
+      }),
+      providesTags: ["Posts"],
+    }),
+    getPost: builder.query({
+      query: (args) => ({
+        url: args.url ? `/posts/${args.url}` : "/posts",
+        method: "GET",
+        params: args?.params,
       }),
       providesTags: ["Post"],
     }),
@@ -19,7 +27,7 @@ export const postApi = baseApi.injectEndpoints({
         body: objectToFormData(body),
       }),
 
-      invalidatesTags: ["Post"],
+      invalidatesTags: ["Posts"],
       transformErrorResponse: (response) => errorHandler(response),
     }),
     updatePost: builder.mutation({
@@ -28,7 +36,7 @@ export const postApi = baseApi.injectEndpoints({
         method: "POST",
         body: objectToFormData({ _method: "PUT", ...body }),
       }),
-      invalidatesTags: ["Post"],
+      invalidatesTags: ["Posts"],
       transformErrorResponse: (response) => errorHandler(response),
     }),
     deletePost: builder.mutation({
@@ -36,15 +44,25 @@ export const postApi = baseApi.injectEndpoints({
         url: `/posts/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Post"],
+      invalidatesTags: ["Posts"],
+      transformErrorResponse: (response) => errorHandler(response),
+    }),
+    likePost: builder.mutation({
+      query: (id) => ({
+        url: `/posts/${id}/like`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Posts", "Post"],
       transformErrorResponse: (response) => errorHandler(response),
     }),
   }),
 });
 
 export const {
+  useGetPostsQuery,
   useGetPostQuery,
   useCreatePostMutation,
   useUpdatePostMutation,
   useDeletePostMutation,
+  useLikePostMutation,
 } = postApi;

@@ -1,19 +1,17 @@
 import CommentSection from "@/components/CommentSection";
 import PreviewPost from "@/components/PreviewPost";
-import { useGetBaseQuery } from "@/service/baseApi";
+import { useGetPostQuery } from "@/service/extended/postApi";
 import { Flex, Skeleton } from "antd";
 import { useParams } from "react-router-dom";
 
 const PostDetail = () => {
   const { slug } = useParams();
-  const { data, isLoading, isFetching } = useGetBaseQuery({
-    url: `/posts/${slug}`,
-  });
+  const { data, isLoading } = useGetPostQuery({ url: slug });
 
   const post = data?.data;
   return (
     <>
-      {(isLoading, isFetching) ? (
+      {isLoading ? (
         <Flex vertical gap={24} style={{ maxWidth: "800px", margin: "0 auto" }}>
           <Skeleton.Image style={{ width: "100%", height: "50vh" }} />
           <Skeleton />
@@ -21,10 +19,7 @@ const PostDetail = () => {
           <Skeleton />
         </Flex>
       ) : (
-        <PreviewPost
-          {...post}
-          author={post?.author.name}
-        />
+        <PreviewPost {...post} author={post?.author.name} />
       )}
 
       <section style={{ marginBlock: 64, maxWidth: 800, marginInline: "auto" }}>
