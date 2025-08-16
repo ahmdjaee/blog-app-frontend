@@ -1,132 +1,184 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Col, Divider, Row, Space, Spin, Statistic, Table, Tag, Typography } from "antd";
+import { useGetBaseQuery } from "@/service/baseApi";
+import {
+  AppstoreAddOutlined,
+  FileTextOutlined,
+  LoadingOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
+import styled from "@emotion/styled";
+import { Button, Col, Flex, Row, Spin, Statistic, Table, Tooltip, Typography } from "antd";
 
-const columns = [
+const { Title } = Typography;
+
+const postColumns = [
+  {
+    title: "Title",
+    dataIndex: "title",
+    key: "title",
+    render: (title) => (
+      <Tooltip className="cs-ellipsis" placement="topLeft" title={title}>
+        {title}
+      </Tooltip>
+    ),
+  },
+  {
+    title: "Category",
+    dataIndex: "category",
+    key: "category",
+    render: (category) => (
+      <Button color="primary" variant="filled">
+        {category?.name}
+      </Button>
+    ),
+  },
+  {
+    title: "Published At",
+    dataIndex: "published_at",
+    key: "published_at",
+  },
+];
+
+const userColumns = [
   {
     title: "Name",
     dataIndex: "name",
     key: "name",
-    render: (text) => <a>{text}</a>,
   },
   {
-    title: "Age",
-    dataIndex: "age",
-    key: "age",
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
   },
   {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: (_, record) => (
-      <Space size="middle">
-        <a>Invite {record.name}</a>
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
+    title: "Date",
+    dataIndex: "date",
+    key: "created_at",
   },
 ];
 
+const MainCard = styled.div`
+  box-shadow: rgba(22, 119, 255, 0.116) 0px 7px 29px 0px;
+  padding: 28px 28px;
+  background-color: white;
+  border-radius: 4px;
+`;
+
 const Dashboard = () => {
+  const { isError, data, isLoading } = useGetBaseQuery(
+    { url: "admin/dashboard/summary" },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  const { data: posts, isLoading: isLoadingPosts } = useGetBaseQuery(
+    { url: "admin/dashboard/latest-posts" },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  const { data: users, isLoading: isLoadingUsers } = useGetBaseQuery(
+    { url: "admin/dashboard/latest-users" },
+    { refetchOnMountOrArgChange: true }
+  );
+
+  const summary = data?.data;
+
+  const postsSource = posts?.data.map((post) => post);
+  const usersSource = users?.data.map((user) => user);
+
   return (
     <div>
-      <Row gutter={[16, 16]}>
-        <Col span={12}>
-          <StatisticWithState
-            title={"Total Users"}
-            value={0}
-            isLoading={false}
-            isError={false}
-            isFetching={false}
-          />
+      <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
+        <Col span={8}>
+          <MainCard>
+            <StatisticWithState
+              title={"Total Users"}
+              value={summary?.total_users}
+              isLoading={isLoading}
+              isError={isError}
+            >
+              <TeamOutlined style={{ fontSize: 30 }} />
+            </StatisticWithState>
+          </MainCard>
         </Col>
-        <Col span={12}>
-          <StatisticWithState
-            title={"Total Posts"}
-            value={0}
-            isLoading={false}
-            isError={false}
-            isFetching={false}
-          />
+        <Col span={8}>
+          <MainCard>
+            <StatisticWithState
+              title={"Total Posts (Published)"}
+              value={summary?.total_posts}
+              isLoading={isLoading}
+              isError={isError}
+            >
+              <FileTextOutlined style={{ fontSize: 30 }} />
+            </StatisticWithState>
+          </MainCard>
         </Col>
-        <Col span={12}>
-          <StatisticWithState
-            title={"Total Category"}
-            value={0}
-            isLoading={false}
-            isError={false}
-            isFetching={false}
-          />
-        </Col>
-        <Col span={12}>
-          <StatisticWithState
-            title={"Total Views"}
-            value={0}
-            isLoading={false}
-            isError={false}
-            isFetching={false}
-          />
+        <Col span={8}>
+          <MainCard>
+            <StatisticWithState
+              title={"Total Categories"}
+              value={summary?.total_categories}
+              isLoading={isLoading}
+              isError={isError}
+            >
+              <AppstoreAddOutlined style={{ fontSize: 30 }} />
+            </StatisticWithState>
+          </MainCard>
         </Col>
       </Row>
-      <Divider />
-      <Table columns={columns} dataSource={data} />
+      <Row gutter={[16, 16]}>
+        <Col span={14}>
+          <MainCard>
+            <Title level={4} style={{ marginBottom: 12 }}>
+              Latest Posts (Published)
+            </Title>
+            <Table
+              loading={isLoadingPosts}
+              style={{ minHeight: 400 }}
+              columns={postColumns}
+              dataSource={postsSource}
+              pagination={false}
+            />
+          </MainCard>
+        </Col>
+        <Col span={10}>
+          <MainCard>
+            <Title level={4} style={{ marginBottom: 12 }}>
+              Latest Users
+            </Title>
+            <Table
+              loading={isLoadingUsers}
+              style={{ minHeight: 400 }}
+              columns={userColumns}
+              dataSource={usersSource}
+              pagination={false}
+            />
+          </MainCard>
+        </Col>
+      </Row>
     </div>
   );
 };
 
-function StatisticWithState({ title, value = 0, isLoading, isError, isFetching }) {
+function StatisticWithState({ title, value = 0, isLoading, isError, children }) {
   return (
-    <Spin spinning={isLoading || isFetching} indicator={<LoadingOutlined />}>
+    <Spin spinning={isLoading} indicator={<LoadingOutlined />}>
       {isError ? (
         <Typography.Text type="danger">Oops something went wrong</Typography.Text>
       ) : (
-        <Statistic title={title} value={value} />
+        <Flex justify="space-between">
+          <Statistic title={title} value={value} />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div
+              style={{
+                padding: 20,
+                borderRadius: "50%",
+                backgroundColor: "rgba(22, 119, 255, 0.193)",
+                color: "rgb(22, 119, 255)",
+              }}
+            >
+              {children}
+            </div>
+          </div>
+        </Flex>
       )}
     </Spin>
   );

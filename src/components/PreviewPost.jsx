@@ -42,10 +42,10 @@ function PreviewPost({
         <Divider />
         <Flex align="center" justify="space-between">
           <Space>
-            <Button variant="text" onClick={() => {}} color={false ? "primary" : "default"}>
+            {/* <Button variant="text" onClick={() => {}} color={false ? "primary" : "default"}>
               <EyeOutlined style={{ fontSize: 16 }} />
               {12}
-            </Button>
+            </Button> */}
             <Button variant="text" onClick={handleLikes} color={liked ? "primary" : "default"}>
               <LikeOutlined style={{ fontSize: 16 }} />
               {likes}

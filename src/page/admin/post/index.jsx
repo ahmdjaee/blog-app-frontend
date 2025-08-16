@@ -1,6 +1,10 @@
 import useDebounced from "@/hooks/useDebounce";
 import { SEARCH_TIMEOUT } from "@/lib/settings";
-import { useDeletePostMutation, useGetPostQuery } from "@/service/extended/postApi";
+import {
+  useDeletePostMutation,
+  useGetPostQuery,
+  useGetPostsQuery,
+} from "@/service/extended/postApi";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -30,7 +34,7 @@ const PostPanel = () => {
     data: list,
     isLoading: isListLoading,
     isFetching: isListFetching,
-  } = useGetPostQuery(params);
+  } = useGetPostsQuery({ params: params });
 
   const [deletePost, { isLoading: isDeleteLoading }] = useDeletePostMutation();
 
@@ -91,16 +95,20 @@ const PostPanel = () => {
       title: "Category",
       dataIndex: "category",
       key: "category",
-      render: (category) => <Text type="success">{category?.name}</Text>,
+      render: (category) => (
+        <Button color="primary" variant="filled">
+          {category?.name}
+        </Button>
+      ),
     },
     {
       title: "Published",
       dataIndex: "published",
       key: "published",
       render: (_, record) => (
-        <Text type={record.published ? "success" : "danger"}>
+        <Button color={record.published ? "primary" : "danger"} variant="link">
           {record.published ? "Published" : "Draft"}
-        </Text>
+        </Button>
       ),
     },
     {
@@ -175,7 +183,6 @@ const PostPanel = () => {
             });
           }}
         />
-        ;
       </Spin>
     </>
   );

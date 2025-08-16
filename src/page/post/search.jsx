@@ -27,6 +27,7 @@ function PostSearch() {
     value: category.slug,
     label: category.name,
   }));
+  
   const onChange = (e) => {
     setValue(e.target.value);
     window.scrollTo({ top: 0, behavior: "smooth" });

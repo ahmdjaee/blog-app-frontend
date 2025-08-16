@@ -62,8 +62,10 @@ export const router = createBrowserRouter(
           <Route path="posts/category/:category" element={<PostByCategory />} />
         </Route>
         <Route path="posts/search" element={<PostSearch />} />
-        <Route path="posts/bookmark" element={<Bookmark />} />
         <Route path="posts/:slug" element={<PostDetail />} />
+        <Route element={<RequireAuth />}>
+          <Route path="posts/bookmarks" element={<Bookmark />} />
+        </Route>
       </Route>
 
       <Route element={<MustNotAuth />}>

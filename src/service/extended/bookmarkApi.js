@@ -6,13 +6,13 @@ import { store } from "@/redux/store";
 
 export const bookmarkApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getBookmark: builder.query({
+    getBookmarks: builder.query({
       query: ({ url = "", params = {} }) => ({
         url: "/bookmarks" + (url !== "" ? `/${url}` : ""),
         method: "GET",
         params: params,
       }),
-      providesTags: ["Bookmark"],
+      providesTags: ["Bookmarks"],
     }),
     toggleBookmark: builder.mutation({
       query: ({ ...body }) => ({
@@ -20,10 +20,15 @@ export const bookmarkApi = baseApi.injectEndpoints({
         method: "POST",
         body: objectToFormData(body),
       }),
-       // post_id adalah payload dari toggleBookmark
+      invalidatesTags: ["Bookmarks"],
+      // post_id adalah payload dari toggleBookmark
       async onQueryStarted({ post_id }, { dispatch, queryFulfilled }) {
         try {
           const { data: res } = await queryFulfilled;
+
+          const bookmarks = bookmarkApi.util.selectInvalidatedBy(store.getState(), [
+            { type: "Bookmarks" },
+          ]);
 
           const posts = baseApi.util.selectInvalidatedBy(store.getState(), [{ type: "Posts" }]);
           const post = baseApi.util.selectInvalidatedBy(store.getState(), [{ type: "Post" }]);
@@ -48,6 +53,20 @@ export const bookmarkApi = baseApi.injectEndpoints({
               })
             );
           });
+
+          bookmarks.forEach((entry) => {
+            dispatch(
+              bookmarkApi.util.updateQueryData("getBookmarks", entry.originalArgs, (draft) => {
+                const posts = draft?.data;
+                const postIndex = posts?.findIndex(
+                  (post) => parseInt(post?.id) === parseInt(post_id)
+                );
+                if (postIndex !== -1) {
+                  posts?.splice(postIndex, 1);
+                }
+              })
+            );
+          });
         } catch (e) {
           console.error(e);
         }
@@ -57,4 +76,4 @@ export const bookmarkApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetBookmarkQuery, useToggleBookmarkMutation } = bookmarkApi;
+export const { useGetBookmarksQuery, useToggleBookmarkMutation } = bookmarkApi;

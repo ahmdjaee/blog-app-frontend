@@ -102,9 +102,10 @@ export const baseApi = createApi({
   }),
   endpoints: (builder) => ({
     getBase: builder.query({
-      query: () => ({
-        url: "posts",
+      query: ({url ="", params={}}) => ({
+        url: url,
         method: "GET",
+        params: params,
       }),
     }),
   }),

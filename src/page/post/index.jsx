@@ -13,7 +13,7 @@ const PostByCategory = () => {
   return (
     <ListPost
       params={{ category: category, ...params }}
-      onLoadMore={() => setParams({ ...params, limit: params.limit + 1 })}
+      onLoadMore={() => setParams({ ...params, limit: params.limit + 10 })}
       title={null}
     />
   );

@@ -12,8 +12,9 @@ import {
   ExclamationCircleFilled,
   HomeOutlined,
   LogoutOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { Button, Drawer, Flex, Grid, Input, Layout, Menu, Modal } from "antd";
+import { Button, Card, Drawer, Flex, Grid, Input, Layout, Menu, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -42,9 +43,14 @@ const MainLayout = () => {
       icon: <HomeOutlined />,
     },
     {
-      key: "/posts/bookmark",
+      key: "/posts/bookmarks",
       label: "Bookmark",
       icon: <BookOutlined />,
+    },
+    {
+      key: "/profile",
+      label: "Profile",
+      icon: <UserOutlined />,
     },
     {
       key: "/admin/dashboard",
@@ -58,6 +64,9 @@ const MainLayout = () => {
       key: "logout",
       label: "Logout",
       icon: <LogoutOutlined />,
+    },
+    {
+      type: "divider",
     },
   ];
   const showDrawer = () => {
@@ -107,9 +116,7 @@ const MainLayout = () => {
           style={{ maxWidth: 1250, marginInline: "auto" }}
           align="center"
         >
-          {location.pathname !== "/" && !lg && (
-            <ArrowLeftOutlined onClick={() => navigate(-1)} />
-          )}
+          {location.pathname !== "/" && !lg && <ArrowLeftOutlined onClick={() => navigate(-1)} />}
           {md && <Logo style={{ fontSize: 20, marginRight: "auto" }} />}
 
           <ProfileButton
@@ -134,7 +141,7 @@ const MainLayout = () => {
             onSearch={onSearch}
             style={{ minWidth: 150, flex: 1, maxWidth: 500 }}
           />
-          <Button icon={<BarsOutlined />} onClick={showDrawer} />
+          {user && <Button icon={<BarsOutlined />} onClick={showDrawer} />}
         </Flex>
       </nav>
 
@@ -156,6 +163,11 @@ const MainLayout = () => {
           // defaultOpenKeys={["category"]}
           items={items}
         />
+        <Card style={{ marginTop: 20 }}>
+          This website is only for showcasing projects. If you are interested, please contact me on
+          Instagram <a href="https://www.instagram.com/jaee.eee_">@jaee.eee_</a>_ for further
+          information. Thanks!
+        </Card>
       </Drawer>
       <Content
         style={{

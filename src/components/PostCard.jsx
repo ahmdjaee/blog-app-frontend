@@ -79,7 +79,7 @@ function PostCard({ post = {}, style}) {
             <Text style={{ textWrap: "nowrap" }}>{post.published_at}</Text>
 
             <Flex gap={16} justify="end" style={{ marginTop: "6px", marginRight: "8px" }}>
-              <IconText icon={EyeFilled} text={100} />
+              {/* <IconText icon={EyeFilled} text={100} /> */}
               <IconText icon={MessageFilled} text={post?.comments} />
               <IconText icon={LikeFilled} text={post?.likes} />
             </Flex>
