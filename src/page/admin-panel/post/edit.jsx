@@ -43,7 +43,7 @@ function PostEditPanel() {
       if (user?.role === "admin") {
         navigate("/admin/posts");
       } else {
-        navigate("/user/posts");
+        navigate("/user/posts/drafts");
       }
     }
   }, [state, navigate, user?.role]);
@@ -110,7 +110,7 @@ function EditPostForm({ html, form, getThumbnail, onRemove }) {
       if (user?.role === "admin") {
         navigate("/admin/posts");
       } else {
-        navigate("/user/posts");
+        navigate("/user/posts/drafts");
       }
     }
   }, [isSuccessPost, navigate, user?.role]);

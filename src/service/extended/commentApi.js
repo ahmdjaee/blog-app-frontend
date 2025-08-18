@@ -8,7 +8,10 @@ const commentApi = baseApi.injectEndpoints({
       providesTags: ["Comment"],
     }),
     getComments: builder.query({
-      query: (params) => ({ url: "/comments", params: params }),
+      query: (args) => ({
+        url: args?.url ? args?.url : "/comments",
+        params: args?.params,
+      }),
       providesTags: ["Comment"],
     }),
     createComment: builder.mutation({
@@ -64,5 +67,5 @@ export const {
   useCreateCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
-  useLikeCommentMutation
+  useLikeCommentMutation,
 } = commentApi;

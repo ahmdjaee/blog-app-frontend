@@ -6,7 +6,7 @@ function MustIsAdmin() {
   let location = useLocation();
 
   if (user?.role !== "admin") {
-    return <Navigate to="/user/dashboard" state={{ from: location }} replace />;
+    return <Navigate to="/user/posts/drafts" state={{ from: location }} replace />;
   }
 
   return <Outlet />;

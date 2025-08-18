@@ -1,13 +1,9 @@
+import ContentWrapper from "@/components/ContentWrapper";
 import PostCard from "@/components/PostCard";
 import { useGetBookmarksQuery } from "@/service/extended/bookmarkApi";
 import styled from "@emotion/styled";
 import { Button, Empty, Flex, Skeleton, Spin, Typography } from "antd";
 import { useState } from "react";
-
-const ContentWrapper = styled.div`
-  max-width: 680px;
-  margin: 24px auto;
-`;
 
 const CardHeader = styled.div`
   background-color: rgb(22, 119, 255);

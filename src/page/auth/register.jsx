@@ -24,65 +24,67 @@ const Register = () => {
 
   return (
     <FloatCircularIndicator isLoading={isLoading}>
-      <MainCard>
+      <div className="">
         <Link to={"/"}>
-          <Flex style={{ marginBottom: 12 }} justify="center" gap={12}>
+          <Flex style={{ marginBottom: 24 }} justify="center" gap={12}>
             <HomeFilled />
             Home
           </Flex>
         </Link>
-        <Form
-          name="register"
-          style={{
-            width: 360,
-          }}
-          size="large"
-          onFinish={onFinish}
-        >
-          <Title level={4} style={{ marginBottom: 20 }}>
-            Register
-          </Title>
-
-          <Form.Item
-            name="name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+        <MainCard>
+          <Form
+            name="register"
+            style={{
+              width: 360,
+            }}
+            size="large"
+            onFinish={onFinish}
           >
-            <Input prefix={<UserOutlined />} placeholder="Name" />
-          </Form.Item>
-          <Form.Item
-            name="email"
-            rules={[
-              {
-                required: true,
-                type: "email",
-              },
-            ]}
-          >
-            <Input prefix={<MailOutlined />} type="email" placeholder="Email" />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                min: 8,
-              },
-            ]}
-          >
-            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-          </Form.Item>
-          <Form.Item>
-            <Button block type="primary" htmlType="submit">
+            <Title level={4} style={{ marginBottom: 20 }}>
               Register
-            </Button>
-            already have an account? <Link to="/auth/login">Log in</Link>
-          </Form.Item>
-        </Form>
-      </MainCard>
+            </Title>
+
+            <Form.Item
+              name="name"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined />} placeholder="Name" />
+            </Form.Item>
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                },
+              ]}
+            >
+              <Input prefix={<MailOutlined />} type="email" placeholder="Email" />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  min: 8,
+                },
+              ]}
+            >
+              <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+            </Form.Item>
+            <Form.Item>
+              <Button block type="primary" htmlType="submit">
+                Register
+              </Button>
+              already have an account? <Link to="/auth/login">Log in</Link>
+            </Form.Item>
+          </Form>
+        </MainCard>
+      </div>
     </FloatCircularIndicator>
   );
 };

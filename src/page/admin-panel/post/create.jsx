@@ -99,7 +99,7 @@ function CreatePostForm({ html, form, getThumbnail, onRemove }) {
       if (user?.role === "admin") {
         navigate("/admin/posts");
       } else {
-        navigate("/user/posts");
+        navigate("/user/posts/drafts");
       }
     }
   }, [isSuccessPost, navigate, user?.role]);

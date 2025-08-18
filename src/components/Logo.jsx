@@ -11,16 +11,16 @@ function Logo({ style }) {
       style={{ cursor: "pointer", ...style }}
       onClick={() => navigate("/")}
     >
+      
       <p
         style={{
           lineHeight: "32px",
           alignSelf: "end",
-          fontStyle: "italic",
           fontWeight: "bold",
           fontSize: "26px",
         }}
       >
-        Diggies
+        𝒟𝒾𝑔𝑔𝒾𝑒𝓈
       </p>
     </Flex>
   );

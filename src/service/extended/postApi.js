@@ -6,7 +6,7 @@ export const postApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: (args) => ({
-        url: args.url ? `/posts/${args.url}` : "/posts",
+        url: args.url ? `/${args.url}` : "/posts",
         method: "GET",
         params:args?.params,
       }),

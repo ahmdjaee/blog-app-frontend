@@ -16,8 +16,8 @@ const postColumns = [
     dataIndex: "title",
     key: "title",
     render: (title) => (
-      <Tooltip className="cs-ellipsis" placement="topLeft" title={title}>
-        {title}
+      <Tooltip placement="topLeft" title={title}>
+        <div className="cs-ellipsis" style={{maxWidth: 200}}>{title}</div>
       </Tooltip>
     ),
   },
@@ -51,7 +51,7 @@ const userColumns = [
   },
   {
     title: "Date",
-    dataIndex: "date",
+    dataIndex: "created_at",
     key: "created_at",
   },
 ];

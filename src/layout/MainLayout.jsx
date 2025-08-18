@@ -6,6 +6,7 @@ import { useLogoutMutation } from "@/service/extended/authApi";
 import { removeUserAndToken } from "@/service/token";
 import {
   ArrowLeftOutlined,
+  BarChartOutlined,
   BarsOutlined,
   BookOutlined,
   ContainerOutlined,
@@ -56,6 +57,11 @@ const MainLayout = () => {
       key: "/admin/dashboard",
       label: "Manage Posts",
       icon: <ContainerOutlined />,
+    },
+    {
+      key: "/user/posts/stats",
+      label: "Stats",
+      icon: <BarChartOutlined />,
     },
     {
       type: "divider",
