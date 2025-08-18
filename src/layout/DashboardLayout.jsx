@@ -219,7 +219,7 @@ const DashboardLayout = () => {
             marginTop: "auto",
           }}
         >
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          Diggies ©{new Date().getFullYear()} Created by Ahmad Jaelani
         </Footer>
       </Layout>
     </Layout>

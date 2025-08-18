@@ -11,7 +11,7 @@ const UserPostLayout = () => {
   const [params, setParams] = useState({
     keyword: "",
     page: 1,
-    limit: 10,
+    limit: 15,
   });
 
   const {

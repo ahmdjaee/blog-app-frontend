@@ -3,7 +3,7 @@ import { useState } from "react";
 
 function Home() {
   const [params, setParams] = useState({
-    limit: 10,
+    limit: 15,
     page: 1,
     published: 1,
   });
@@ -13,7 +13,7 @@ function Home() {
   return (
     <ListPost
       params={params}
-      onLoadMore={() => setParams({ ...params, limit: params.limit + 10 })}
+      onLoadMore={() => setParams({ ...params, limit: params.limit + 15 })}
     />
   );
 }

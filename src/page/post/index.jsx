@@ -6,14 +6,14 @@ const PostByCategory = () => {
   const { category } = useParams();
 
   const [params, setParams] = useState({
-    limit: 10,
+    limit: 15,
     published: 1,
   });
 
   return (
     <ListPost
       params={{ category: category, ...params }}
-      onLoadMore={() => setParams({ ...params, limit: params.limit + 10 })}
+      onLoadMore={() => setParams({ ...params, limit: params.limit + 15 })}
       title={null}
     />
   );

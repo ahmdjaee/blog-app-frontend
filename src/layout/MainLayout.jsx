@@ -10,12 +10,13 @@ import {
   BarsOutlined,
   BookOutlined,
   ContainerOutlined,
+  EditOutlined,
   ExclamationCircleFilled,
   HomeOutlined,
   LogoutOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Drawer, Flex, Grid, Input, Layout, Menu, Modal } from "antd";
+import { Button, Card, Drawer, Flex, FloatButton, Grid, Input, Layout, Menu, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -49,7 +50,7 @@ const MainLayout = () => {
       icon: <BookOutlined />,
     },
     {
-      key: "/profile",
+      key: "/user/profile",
       label: "Profile",
       icon: <UserOutlined />,
     },
@@ -186,6 +187,11 @@ const MainLayout = () => {
       >
         <Outlet />
       </Content>
+      <FloatButton
+        icon={<EditOutlined />}
+        type="primary"
+        style={{ insetInlineEnd: "clamp(16px, 8vw, 140px)" }}
+      />
     </div>
   );
 };

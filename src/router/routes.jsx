@@ -30,6 +30,9 @@ import RequireAuth from "./RequireAuth";
 import UserPostLayout from "@/page/user-panel/UserPostLayout";
 import UserPostCreatePanel from "@/page/user-panel/post/create";
 import UserPostEditPanel from "@/page/user-panel/post/edit";
+import UserProfileLayout from "@/page/user-panel/UserProfileLayout";
+import UserAccountPanel from "@/page/user-panel/profile/account";
+import UserSocialPanel from "@/page/user-panel/profile/social";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -64,6 +67,10 @@ export const router = createBrowserRouter(
               <Route path="drafts" element={<UserDraftPanel />} />
               <Route path="published" element={<UserPublishedPanel />} />
               <Route path="comments" element={<UserCommentPanel />} />
+            </Route>
+            <Route path="profile" element={<UserProfileLayout />}>
+              <Route index element={<UserAccountPanel />} />
+              <Route path="socials" element={<UserSocialPanel />} />
             </Route>
             <Route path="posts/create" element={<UserPostCreatePanel />} />
             <Route path="posts/edit" element={<UserPostEditPanel />} />
