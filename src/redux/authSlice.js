@@ -20,3 +20,4 @@ export const { setAuth, removeAuth } = authSlice.actions;
 
 export const selectAuth = (state) => state.auth.user;
 export default authSlice.reducer;
+

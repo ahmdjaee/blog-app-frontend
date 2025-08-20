@@ -67,7 +67,7 @@ function UserAccountPanel() {
 
       <br />
       <br />
-      <Title level={5}>Change Password</Title>
+      {/* <Title level={5}>Change Password</Title> */}
       {/* <Spin spinning={isLoading}>
         <Form
           onFinish={onFinish}

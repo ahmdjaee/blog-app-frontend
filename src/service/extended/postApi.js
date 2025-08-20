@@ -3,6 +3,7 @@ import { baseApi } from "../baseApi";
 import { errorHandler } from "../errorHandler";
 
 export const postApi = baseApi.injectEndpoints({
+  
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: (args) => ({

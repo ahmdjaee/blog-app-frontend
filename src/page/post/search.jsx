@@ -1,9 +1,11 @@
 import ListPost from "@/components/ListPost";
+import usePostParams from "@/hooks/usePostParams";
 import { useGetCategoryQuery } from "@/service/extended/categoryApi";
 import styled from "@emotion/styled";
-import { Button, Col, Flex, Radio, Row, Typography } from "antd";
+import { Button, Col, Flex, Radio, Row, Spin, Typography } from "antd";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+
 const style = {
   display: "flex",
   flexDirection: "column",
@@ -22,12 +24,13 @@ function PostSearch() {
   const [searchParams] = useSearchParams();
   const [value, setValue] = useState(null);
   const { data, isLoading } = useGetCategoryQuery();
+  const { params, setParams } = usePostParams();
 
   const categories = data?.data?.map((category) => ({
     value: category.slug,
     label: category.name,
   }));
-  
+
   const onChange = (e) => {
     setValue(e.target.value);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -47,11 +50,9 @@ function PostSearch() {
           params={{
             keyword: searchParams.get("keyword"),
             category: searchParams.get("category") || "",
-            limit: 15,
-            page: 1,
-            published: 1,
+            ...params,
           }}
-          onLoadMore={() => {}}
+          onLoadMore={() => setParams({ ...params, limit: params.limit + 15 })}
           title={
             <>
               <Typography.Text type="secondary" style={{ fontWeight: "600" }}>
@@ -69,7 +70,9 @@ function PostSearch() {
               Reset
             </Button>
           </Flex>
-          <Radio.Group style={style} onChange={onChange} value={value} options={categories} />
+          <Spin spinning={isLoading} style={{ height: 200 }}>
+            <Radio.Group style={style} onChange={onChange} value={value} options={categories} />
+          </Spin>
         </Aside>
       </Col>
     </Row>

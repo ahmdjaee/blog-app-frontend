@@ -4,20 +4,11 @@ import SubmitButton from "@/components/SubmitButton";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetCategoryQuery } from "@/service/extended/categoryApi";
 import { useUpdatePostMutation } from "@/service/extended/postApi";
-import { InfoCircleOutlined, UploadOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Select,
-  Space,
-  Spin,
-  Tabs,
-  Upload,
-} from "antd";
+import { InboxOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input, Select, Space, Spin, Tabs, Upload } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+const { Dragger } = Upload;
 
 function PostEditPanel() {
   const navigate = useNavigate();
@@ -131,7 +122,7 @@ function EditPostForm({ html, form, getThumbnail, onRemove }) {
         }}
       >
         <Form.Item label="Thumbnail" name="thumbnail">
-          <Upload
+          {/* <Upload
             name="thumbnail"
             beforeUpload={getThumbnail}
             onRemove={onRemove}
@@ -140,7 +131,29 @@ function EditPostForm({ html, form, getThumbnail, onRemove }) {
             maxCount={1}
           >
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
-          </Upload>
+          </Upload> */}
+
+          <Dragger
+            name="thumbnail"
+            beforeUpload={getThumbnail}
+            onRemove={onRemove}
+            listType="picture"
+            accept="image/*"
+            maxCount={1}
+            defaultFileList={[
+              {
+                status: "done",
+                
+                url: state?.thumbnail,
+              },
+            ]}
+          >
+            <div style={{ textAlign: "center", fontSize: 40, color: "#8a8a8a" }}>
+              <InboxOutlined />
+            </div>
+
+            <p className="ant-upload-text">Click or drag image to this area</p>
+          </Dragger>
         </Form.Item>
         <Form.Item
           name="title"
@@ -151,7 +164,7 @@ function EditPostForm({ html, form, getThumbnail, onRemove }) {
             },
           ]}
         >
-          <Input placeholder="Insert category title" />
+          <Input placeholder="Insert post title" />
         </Form.Item>
         <Form.Item
           name="slug"
@@ -169,6 +182,10 @@ function EditPostForm({ html, form, getThumbnail, onRemove }) {
         >
           <Input placeholder="slug-example-name" />
         </Form.Item>
+        <Form.Item name="sub_title" label="Sub Title">
+          <Input placeholder="Insert post sub title" />
+        </Form.Item>
+
         <Form.Item label="Content" required>
           <Editor
             ref={quillRef}

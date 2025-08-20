@@ -3,12 +3,8 @@ import styled from "@emotion/styled";
 import { Avatar, Col, Flex, List, Row, Tabs } from "antd";
 import SkeletonButton from "antd/es/skeleton/Button";
 import { Outlet, useNavigate } from "react-router-dom";
+import RecommendationAside from "./partials/RecommendationAside";
 
-const Aside = styled.div`
-  padding: 16px;
-  padding-top: 0;
-  border-left: 1px solid #f0f0f0;
-`;
 function TabLayout() {
   const navigate = useNavigate();
 
@@ -47,32 +43,11 @@ function TabLayout() {
         />
       )}
       <Row gutter={[16, 16]}>
-        <Col span={16}>
+        <Col span={24} lg={16}>
           <Outlet />
         </Col>
-        <Col span={8}>
-          <Aside>
-            <p className="cs-banner-title">Recommendation</p>
-            <List
-              itemLayout="horizontal"
-              dataSource={Array.from({ length: 10 }, (_, i) => ({
-                id: i,
-                title: `Dummy Title ${i}`,
-                description: `Dummy Description ${i}`,
-              }))}
-              renderItem={(item, index) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={
-                      <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />
-                    }
-                    title={<a href="https://ant.design">{item.title}</a>}
-                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                  />
-                </List.Item>
-              )}
-            />
-          </Aside>
+        <Col span={0} lg={8}>
+          <RecommendationAside />
         </Col>
       </Row>
     </>

@@ -1,7 +1,7 @@
 import UserPostList from "./partials/UserPostList";
 
 const UserPublishedPanel = () => {
-  return <UserPostList path="published" />;
+  return <UserPostList/>;
 };
 
 export default UserPublishedPanel;

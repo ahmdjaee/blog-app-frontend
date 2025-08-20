@@ -64,7 +64,6 @@ const profileApi = baseApi.injectEndpoints({
 export const {
   useGetProfileQuery,
   useUpdateSocialMutation,
-  useCreateProfileMutation,
   useUpdateProfileMutation,
   useDeleteProfileMutation,
 } = profileApi;

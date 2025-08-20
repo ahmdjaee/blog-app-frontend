@@ -1,11 +1,12 @@
 import { useLikePostMutation } from "@/service/extended/postApi";
-import { EyeOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
+import { LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { Avatar, Button, Divider, Flex, Space, Typography } from "antd";
 import BookmarkToggle from "./BookmarkToggle";
 
 function PreviewPost({
   id,
   title,
+  sub_title,
   thumbnail,
   content,
   author,
@@ -28,10 +29,24 @@ function PreviewPost({
         margin: "0 auto",
       }}
     >
-      <img src={thumbnail} alt="" style={{ width: "100%", maxHeight: 500, objectFit: "contain" }} />
+      <div className="cs-blog-content">
+         <img src={thumbnail} alt="" style={{ width: "100%", objectFit: "contain" }} />
+      </div>
       <section style={{ marginBlock: 20 }}>
-        <Typography.Title level={3} style={{ fontWeight: "700" }}>
+        <Typography.Title level={3} style={{ fontWeight: "700", }}>
           {title}
+        </Typography.Title>
+        <Typography.Title
+          level={4}
+          style={{
+            marginBottom: 16,
+            marginTop: 0,
+            fontWeight: "normal",
+            color: "rgb(107, 107, 107)",
+          }}
+          ellipsis={{ rows: 2 }}
+        >
+          {sub_title}
         </Typography.Title>
         <Space>
           <Avatar src={thumbnail}></Avatar>

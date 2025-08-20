@@ -7,15 +7,15 @@ import { removeUserAndToken } from "@/service/token";
 import {
   AppstoreAddOutlined,
   BarChartOutlined,
-  BarsOutlined,
   CloudOutlined,
   CommentOutlined,
   ExclamationCircleFilled,
   LogoutOutlined,
   MenuFoldOutlined,
+  ReconciliationOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Grid, Layout, Menu, Modal, theme } from "antd";
+import { Button, Grid, Layout, Menu, Modal, theme } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -59,6 +59,11 @@ const itemsAdmin = [
     key: "/admin/users",
     icon: <TeamOutlined />,
     label: "Users",
+  },
+  {
+    key: "/admin/recommendations",
+    icon: <ReconciliationOutlined />,
+    label: "Recommendations",
   },
   {
     key: "logout",

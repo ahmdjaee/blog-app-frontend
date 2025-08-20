@@ -1,38 +1,45 @@
-import useDebounced from "@/hooks/useDebounce";
-import { SEARCH_TIMEOUT } from "@/lib/settings";
-import { useDeletePostMutation, useGetPostsQuery } from "@/service/extended/postApi";
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Flex, Image, Input, Popconfirm, Space, Spin, Table, Tooltip } from "antd";
+import {
+  useDeleteRecommendationMutation,
+  useGetRecommendationsQuery,
+} from "@/service/extended/recommendationApi";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Button, Flex, Image, Input, Popconfirm, Space, Spin, Table } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import CreateRecommendationForm from "./create";
 const { Search } = Input;
 
-const PostPanel = () => {
-  const [params, setParams] = useState({
-    keyword: "",
-    page: 1,
-    limit: 10,
-  });
+function RecommendationPanel() {
+  const [openCreate, setOpenCreate] = useState(false);
+  const [recommendation, setRecommendation] = useState({});
+  const [search, setSearch] = useState("");
 
   const {
     data: list,
-    isLoading: isListLoading,
     isFetching: isListFetching,
-  } = useGetPostsQuery({ params: params });
+    isLoading: isListLoading,
+  } = useGetRecommendationsQuery();
 
-  const [deletePost, { isLoading: isDeleteLoading }] = useDeletePostMutation();
-
-  const setSearchParams = useDebounced((e) => {
-    setParams({ ...params, keyword: e.target.value });
-  }, SEARCH_TIMEOUT);
+  const [deleteRecommendation, { isLoading }] = useDeleteRecommendationMutation();
 
   const handleDelete = async (id) => {
-    await deletePost(id);
+    await deleteRecommendation(id);
+  };
+
+  const showCreateDrawer = () => {
+    setOpenCreate(true);
+  };
+
+  const onCloseCreate = () => {
+    setOpenCreate(false);
+  };
+
+  const onSearch = (e) => {
+    setSearch(e.target.value);
   };
 
   const columns = [
     {
-      title: "Thumbnail",
+      title: "Post thumbnail",
       dataIndex: "thumbnail",
       key: "thumbnail",
       render: (_, record) => (
@@ -50,45 +57,20 @@ const PostPanel = () => {
       ),
     },
     {
-      title: "Title",
+      title: "Post title",
       dataIndex: "title",
       key: "title",
-      render: (title) => (
-        <Tooltip className="cs-ellipsis" placement="topLeft" title={title}>
-          {title}
-        </Tooltip>
-      ),
     },
     {
       title: "Author",
       dataIndex: "author",
       key: "author",
-      render: (author) => <>{author?.name}</>,
     },
+
     {
-      title: "Category",
-      dataIndex: "category",
-      key: "category",
-      render: (category) => (
-        <Button color="primary" variant="filled">
-          {category?.name}
-        </Button>
-      ),
-    },
-    {
-      title: "Published",
-      dataIndex: "published",
-      key: "published",
-      render: (_, record) => (
-        <Button color={record.published ? "primary" : "danger"} variant="link">
-          {record.published ? "Published" : "Draft"}
-        </Button>
-      ),
-    },
-    {
-      title: "Published At",
-      dataIndex: "published_at",
-      key: "published_at",
+      title: "Created At",
+      dataIndex: "created_at",
+      key: "created_at",
     },
     {
       title: "Action",
@@ -96,24 +78,12 @@ const PostPanel = () => {
       align: "right",
       render: (_, record) => (
         <Space size="small">
-          <Link to={`/admin/posts/${record.slug}`} state={record}>
-            <Button color="primary" size="small" variant="text">
-              <EyeOutlined />
-            </Button>
-          </Link>
-
-          <Link to={`/admin/posts/edit`} state={record}>
-            <Button color="primary" size="small" variant="text">
-              <EditOutlined />
-            </Button>
-          </Link>
-
           <Popconfirm
-            title="Are you sure to delete this post?"
+            title="Are you sure to delete this recommendation?"
             placement="topLeft"
-            onConfirm={() => handleDelete(record.id)}
+            onConfirm={() => handleDelete(record.key)}
           >
-            <Button size="small" color="danger" variant="text">
+            <Button size="small" variant="text" color="danger">
               <DeleteOutlined />
             </Button>
           </Popconfirm>
@@ -122,44 +92,45 @@ const PostPanel = () => {
     },
   ];
 
-  const dataSource = list?.data.map((post) => post);
+  const dataSource = list?.data
+    ?.filter((r) => {
+      const lowerCaseSearch = search.toLowerCase();
+
+      return (
+        r?.post?.title.toLowerCase().includes(lowerCaseSearch) ||
+        r?.post?.slug.toLowerCase().includes(lowerCaseSearch)
+      );
+    })
+    .map((r) => ({
+      key: r?.id,
+      title: r?.post.title,
+      thumbnail: r?.post.thumbnail,
+      slug: r?.post.slug,
+      created_at: r.created_at,
+      author: r?.post?.author?.name,
+    }));
 
   return (
     <>
       <Flex justify="space-between" align="center" style={{ marginBottom: 16 }}>
-        <Link to="/admin/posts/create">
-          <Button type="primary" onClick={() => {}}>
-            Create Post
-          </Button>
-        </Link>
+        <Button type="primary" onClick={showCreateDrawer}>
+          Create Recommendation
+        </Button>
         <Search
           placeholder="input search text"
           allowClear
           name="search"
-          onChange={setSearchParams}
+          onChange={onSearch}
           style={{ width: 500 }}
         />
       </Flex>
-      <Spin spinning={isListLoading || isListFetching || isDeleteLoading}>
-        <Table
-          columns={columns}
-          dataSource={dataSource}
-          pagination={{
-            current: params.page,
-            pageSize: params.limit,
-            total: list?.meta?.total,
-            showTotal: (total) => `Total ${total} items`,
-          }}
-          onChange={(pagination) => {
-            setParams({
-              page: pagination.current,
-              limit: pagination.pageSize,
-            });
-          }}
-        />
+      <Spin spinning={isListLoading || isListFetching || isLoading}>
+        <Table columns={columns} dataSource={dataSource} />;
       </Spin>
+      <CreateRecommendationForm open={openCreate} onClose={onCloseCreate} />
+       {/* <UpdateRecommendationForm open={openUpdate} onClose={onCloseUpdate} data={recommendation} />  */}
     </>
   );
-};
+}
 
-export default PostPanel;
+export default RecommendationPanel;

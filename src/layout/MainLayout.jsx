@@ -19,7 +19,7 @@ import {
 import { Button, Card, Drawer, Flex, FloatButton, Grid, Input, Layout, Menu, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 const { Search } = Input;
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -60,7 +60,7 @@ const MainLayout = () => {
       icon: <ContainerOutlined />,
     },
     {
-      key: "/user/posts/stats",
+      key: "/user/stats",
       label: "Stats",
       icon: <BarChartOutlined />,
     },
@@ -187,11 +187,13 @@ const MainLayout = () => {
       >
         <Outlet />
       </Content>
-      <FloatButton
-        icon={<EditOutlined />}
-        type="primary"
-        style={{ insetInlineEnd: "clamp(16px, 8vw, 140px)" }}
-      />
+      <Link to={"/user/posts/create"}>
+        <FloatButton
+          icon={<EditOutlined />}
+          type="primary"
+          style={{ insetInlineEnd: "clamp(16px, 8vw, 140px)" }}
+        />
+      </Link>
     </div>
   );
 };

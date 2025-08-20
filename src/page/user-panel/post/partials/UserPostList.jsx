@@ -77,7 +77,7 @@ function UserPostList({ path = "" }) {
                 avatar={<Avatar src={item.thumbnail} />}
                 title={<a href="https://ant.design">{item.title}</a>}
                 description={<div className="cs-ellipsis">
-                  subtitle
+                  {item.sub_title}
                 </div>}
               />
               {/* <div>content</div> */}

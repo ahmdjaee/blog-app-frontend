@@ -2,6 +2,7 @@ import AuthLayout from "@/layout/AuthLayout";
 import DashboardLayout from "@/layout/DashboardLayout";
 import MainLayout from "@/layout/MainLayout";
 import TabLayout from "@/layout/TabLayout";
+import NotFound from "@/page/NotFound";
 import CategoryPanel from "@/page/admin-panel/category";
 import CommentPanel from "@/page/admin-panel/comment";
 import Dashboard from "@/page/admin-panel/dashboard";
@@ -17,26 +18,29 @@ import Home from "@/page/home";
 import PostByCategory from "@/page/post";
 import PostDetail from "@/page/post/detail";
 import PostSearch from "@/page/post/search";
+import UserPostLayout from "@/page/user-panel/UserPostLayout";
+import UserProfileLayout from "@/page/user-panel/UserProfileLayout";
 import UserDashboard from "@/page/user-panel/dashboard";
 import UserCommentPanel from "@/page/user-panel/post/comment";
+import UserPostCreatePanel from "@/page/user-panel/post/create";
 import UserDraftPanel from "@/page/user-panel/post/draft";
+import UserPostEditPanel from "@/page/user-panel/post/edit";
 import UserPublishedPanel from "@/page/user-panel/post/published";
+import UserAccountPanel from "@/page/user-panel/profile/account";
+import UserSocialPanel from "@/page/user-panel/profile/social";
+import Stats from "@/page/user-panel/stats";
 import { createRoutesFromElements, Route } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import MustIsAdmin from "./MustIsAdmin";
 import MustIsUser from "./MustIsUser";
 import MustNotAuth from "./MustNotAuth";
 import RequireAuth from "./RequireAuth";
-import UserPostLayout from "@/page/user-panel/UserPostLayout";
-import UserPostCreatePanel from "@/page/user-panel/post/create";
-import UserPostEditPanel from "@/page/user-panel/post/edit";
-import UserProfileLayout from "@/page/user-panel/UserProfileLayout";
-import UserAccountPanel from "@/page/user-panel/profile/account";
-import UserSocialPanel from "@/page/user-panel/profile/social";
+import RecommendationPanel from "@/page/admin-panel/recommendation";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
+      <Route path="*" element={<NotFound />} />
       <Route element={<RequireAuth />}>
         <Route element={<MustIsAdmin />}>
           <Route path="admin" element={<DashboardLayout />}>
@@ -45,6 +49,7 @@ export const router = createBrowserRouter(
             <Route path="users" element={<UserPanel />} />
             <Route path="posts" element={<PostPanel />} />
             <Route path="comments" element={<CommentPanel />} />
+            <Route path="recommendations" element={<RecommendationPanel />} />
             <Route path="posts/create" element={<PostCreatePanel />} />
             <Route path="posts/edit" element={<PostEditPanel />} />
             <Route path="posts/:slug" element={<PostDetailPanel />} />
@@ -68,13 +73,15 @@ export const router = createBrowserRouter(
               <Route path="published" element={<UserPublishedPanel />} />
               <Route path="comments" element={<UserCommentPanel />} />
             </Route>
-            <Route path="profile" element={<UserProfileLayout />}>
-              <Route index element={<UserAccountPanel />} />
-              <Route path="socials" element={<UserSocialPanel />} />
-            </Route>
+            <Route path="stats" element={<Stats />} />
             <Route path="posts/create" element={<UserPostCreatePanel />} />
             <Route path="posts/edit" element={<UserPostEditPanel />} />
             <Route path="posts/:slug" element={<PostDetailPanel />} />
+          </Route>
+
+          <Route path="user/profile" element={<UserProfileLayout />}>
+            <Route index element={<UserAccountPanel />} />
+            <Route path="socials" element={<UserSocialPanel />} />
           </Route>
         </Route>
       </Route>

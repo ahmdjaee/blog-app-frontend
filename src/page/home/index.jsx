@@ -1,12 +1,8 @@
 import ListPost from "@/components/ListPost";
-import { useState } from "react";
+import usePostParams from "@/hooks/usePostParams";
 
 function Home() {
-  const [params, setParams] = useState({
-    limit: 15,
-    page: 1,
-    published: 1,
-  });
+  const { params, setParams } = usePostParams();
 
   // const { data: popular, isLoading, isError } = useGetBaseQuery({ url: "/posts/popular" });
 

@@ -17,7 +17,9 @@ const postColumns = [
     key: "title",
     render: (title) => (
       <Tooltip placement="topLeft" title={title}>
-        <div className="cs-ellipsis" style={{maxWidth: 200}}>{title}</div>
+        <div className="cs-ellipsis" style={{ maxWidth: 200 }}>
+          {title}
+        </div>
       </Tooltip>
     ),
   },
@@ -61,6 +63,7 @@ const MainCard = styled.div`
   padding: 28px 28px;
   background-color: white;
   border-radius: 4px;
+  height: 100%;
 `;
 
 const Dashboard = () => {
@@ -87,7 +90,7 @@ const Dashboard = () => {
   return (
     <div>
       <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
-        <Col span={8}>
+        <Col span={24} md={8}>
           <MainCard>
             <StatisticWithState
               title={"Total Users"}
@@ -99,7 +102,7 @@ const Dashboard = () => {
             </StatisticWithState>
           </MainCard>
         </Col>
-        <Col span={8}>
+        <Col span={24} md={8}>
           <MainCard>
             <StatisticWithState
               title={"Total Posts (Published)"}
@@ -111,7 +114,7 @@ const Dashboard = () => {
             </StatisticWithState>
           </MainCard>
         </Col>
-        <Col span={8}>
+        <Col span={24} md={8}>
           <MainCard>
             <StatisticWithState
               title={"Total Categories"}
@@ -125,7 +128,7 @@ const Dashboard = () => {
         </Col>
       </Row>
       <Row gutter={[16, 16]}>
-        <Col span={14}>
+        <Col span={24} lg={12}>
           <MainCard>
             <Title level={4} style={{ marginBottom: 12 }}>
               Latest Posts (Published)
@@ -139,7 +142,7 @@ const Dashboard = () => {
             />
           </MainCard>
         </Col>
-        <Col span={10}>
+        <Col span={24} lg={12}>
           <MainCard>
             <Title level={4} style={{ marginBottom: 12 }}>
               Latest Users

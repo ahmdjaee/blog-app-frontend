@@ -1,14 +1,10 @@
 import ListPost from "@/components/ListPost";
-import { useState } from "react";
+import usePostParams from "@/hooks/usePostParams";
 import { useParams } from "react-router-dom";
 
 const PostByCategory = () => {
   const { category } = useParams();
-
-  const [params, setParams] = useState({
-    limit: 15,
-    published: 1,
-  });
+  const { params, setParams } = usePostParams();
 
   return (
     <ListPost

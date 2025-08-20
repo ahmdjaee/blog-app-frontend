@@ -1,14 +1,14 @@
 import ContentWrapper from "@/components/ContentWrapper";
+import { useAuth } from "@/hooks/useAuth";
+import { setAuthStorageAndState } from "@/redux/store";
+import { getCurrentUserAndToken } from "@/service/token";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Divider, Flex, message, Tabs, Upload } from "antd";
+import Title from "antd/es/typography/Title";
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-const getBase64 = (img, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-};
+
 const beforeUpload = (file) => {
   const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
   if (!isJpgOrPng) {
@@ -24,20 +24,17 @@ const beforeUpload = (file) => {
 const UserProfileLayout = () => {
   const navigate = useNavigate();
   const path = window.location.pathname.split("/").pop();
+  const user = useAuth();
 
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
       return;
     }
     if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
+      setLoading(false);
+      setAuthStorageAndState(info.file.response.data);
     }
   };
   const uploadButton = (
@@ -51,18 +48,39 @@ const UserProfileLayout = () => {
     <ContentWrapper>
       <Flex align="center" justify="space-between">
         <h1 style={{ paddingBlock: "20px" }}>Profile</h1>
-        <Upload
-          accept="image/png, image/jpeg"
-          name="avatar"
-          listType="picture-circle"
-          className="avatar-uploader"
-          showUploadList={false}
-          action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-          beforeUpload={beforeUpload}
-          onChange={handleChange}
-        >
-          {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: "100%" }} /> : uploadButton}
-        </Upload>
+        <div className="">
+          <Upload
+            accept="image/png, image/jpeg"
+            name="avatar"
+            listType="picture-circle"
+            className="avatar-uploader"
+            showUploadList={false}
+            beforeUpload={beforeUpload}
+            onChange={handleChange}
+            action={import.meta.env.VITE_BASE_URL + "/api/profile/update-avatar"}
+            headers={{
+              authorization: `Bearer ${getCurrentUserAndToken()?.token}`,
+            }}
+          >
+            {user?.avatar ? (
+              <img
+                src={user?.avatar}
+                alt="avatar"
+                style={{
+                  width: "100%",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  height: "inherit",
+                }}
+              />
+            ) : (
+              uploadButton
+            )}
+          </Upload>
+          <Title style={{ textAlign: "center" }} level={5}>
+            {user?.name}
+          </Title>
+        </div>
       </Flex>
       <Divider />
       <Tabs
