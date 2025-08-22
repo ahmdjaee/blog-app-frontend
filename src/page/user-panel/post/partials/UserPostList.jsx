@@ -20,7 +20,7 @@ function UserPostList({ path = "" }) {
       // loadMore={loadMore}
       dataSource={list?.data}
       renderItem={(item) => (
-        <Link to={`/user/posts/${item.slug}`} state={item}>
+        <Link to={`/posts/${item.slug}`} state={item}>
           <List.Item
             actions={[
               <Dropdown

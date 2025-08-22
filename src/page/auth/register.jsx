@@ -76,8 +76,8 @@ const Register = () => {
             >
               <Input.Password prefix={<LockOutlined />} placeholder="Password" />
             </Form.Item>
-            <Form.Item>
-              <Button block type="primary" htmlType="submit">
+            <Form.Item style={{ textAlign: "center" }}>
+              <Button style={{ marginBottom: "16px" }} block type="primary" htmlType="submit">
                 Register
               </Button>
               already have an account? <Link to="/auth/login">Log in</Link>

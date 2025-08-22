@@ -1,7 +1,7 @@
-import AuthLayout from "@/layout/AuthLayout";
-import DashboardLayout from "@/layout/DashboardLayout";
-import MainLayout from "@/layout/MainLayout";
-import TabLayout from "@/layout/TabLayout";
+// import AuthLayout from "@/layout/AuthLayout";
+// import DashboardLayout from "@/layout/DashboardLayout";
+// import MainLayout from "@/layout/MainLayout";
+// import TabLayout from "@/layout/TabLayout";
 import NotFound from "@/page/NotFound";
 import CategoryPanel from "@/page/admin-panel/category";
 import CommentPanel from "@/page/admin-panel/comment";
@@ -29,13 +29,20 @@ import UserPublishedPanel from "@/page/user-panel/post/published";
 import UserAccountPanel from "@/page/user-panel/profile/account";
 import UserSocialPanel from "@/page/user-panel/profile/social";
 import Stats from "@/page/user-panel/stats";
+import RecommendationPanel from "@/page/admin-panel/recommendation";
 import { createRoutesFromElements, Route } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import MustIsAdmin from "./MustIsAdmin";
 import MustIsUser from "./MustIsUser";
 import MustNotAuth from "./MustNotAuth";
 import RequireAuth from "./RequireAuth";
-import RecommendationPanel from "@/page/admin-panel/recommendation";
+import { lazy } from "react";
+
+// === Layouts
+const AuthLayout = lazy(() => import("@/layout/AuthLayout"));
+const DashboardLayout = lazy(() => import("@/layout/DashboardLayout"));
+const MainLayout = lazy(() => import("@/layout/MainLayout"));
+const TabLayout = lazy(() => import("@/layout/TabLayout"));
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

@@ -1,7 +1,7 @@
 import { useToggleBookmarkMutation } from "@/service/extended/bookmarkApi";
 import { Button, Tooltip } from "antd";
 
-const BookmarkToggle = ({ isMark = false, postId, params }) => {
+const BookmarkToggle = ({ isMark = false, postId }) => {
   const [toggleBookmark, { isLoading }] = useToggleBookmarkMutation();
   const handleBookmark = async (e) => {
     e.stopPropagation();

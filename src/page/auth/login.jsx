@@ -79,8 +79,8 @@ const Login = () => {
               </Flex>
             </Form.Item>
 
-            <Form.Item>
-              <Button block type="primary" htmlType="submit">
+            <Form.Item style={{ textAlign: "center" }}>
+              <Button style={{ marginBottom: "16px" }} block type="primary" htmlType="submit">
                 Log in
               </Button>
               or <Link to="/auth/register">Register now!</Link>

@@ -8,7 +8,7 @@ function App() {
   return (
     <ConfigProvider form={{ validateMessages: validateMessage }}>
       <Suspense fallback={<Spin fullscreen />}>
-        <RouterProvider fallbackElement={<Spin fullscreen />} router={router} />
+        <RouterProvider router={router} />
       </Suspense>
     </ConfigProvider>
   );

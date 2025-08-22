@@ -120,7 +120,7 @@ function ProfileButton({ style }) {
     >
       <Avatar
         style={{
-          backgroundColor: "#096dd9",
+          backgroundColor: user?.avatar ? "" : "#096dd9",
           verticalAlign: "middle",
           display: !user && "none",
           order: md && 1,

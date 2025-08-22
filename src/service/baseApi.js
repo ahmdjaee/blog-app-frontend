@@ -90,6 +90,7 @@ export const baseApi = createApi({
   refetchOnReconnect: true, // refetch kalau terhubung ke server, (berlaku jika true)
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL + "/api",
+    credentials: "include",
     prepareHeaders: (headers) => {
       const token = getCurrentUserAndToken()?.token;
 

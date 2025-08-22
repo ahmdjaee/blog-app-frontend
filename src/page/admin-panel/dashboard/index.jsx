@@ -1,12 +1,9 @@
+import CustomCard from "@/components/CustomCard";
+import StatisticWithState from "@/components/StatisticWithState";
 import { useGetBaseQuery } from "@/service/baseApi";
-import {
-  AppstoreAddOutlined,
-  FileTextOutlined,
-  LoadingOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+import { AppstoreAddOutlined, FileTextOutlined, TeamOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
-import { Button, Col, Flex, Row, Spin, Statistic, Table, Tooltip, Typography } from "antd";
+import { Button, Col, Row, Table, Tooltip, Typography } from "antd";
 
 const { Title } = Typography;
 
@@ -58,14 +55,6 @@ const userColumns = [
   },
 ];
 
-const MainCard = styled.div`
-  box-shadow: rgba(22, 119, 255, 0.116) 0px 7px 29px 0px;
-  padding: 28px 28px;
-  background-color: white;
-  border-radius: 4px;
-  height: 100%;
-`;
-
 const Dashboard = () => {
   const { isError, data, isLoading } = useGetBaseQuery(
     { url: "admin/dashboard/summary" },
@@ -91,45 +80,39 @@ const Dashboard = () => {
     <div>
       <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
         <Col span={24} md={8}>
-          <MainCard>
-            <StatisticWithState
-              title={"Total Users"}
-              value={summary?.total_users}
-              isLoading={isLoading}
-              isError={isError}
-            >
-              <TeamOutlined style={{ fontSize: 30 }} />
-            </StatisticWithState>
-          </MainCard>
+          <StatisticWithState
+            title={"Total Users"}
+            value={summary?.total_users}
+            isLoading={isLoading}
+            isError={isError}
+          >
+            <TeamOutlined style={{ fontSize: 30 }} />
+          </StatisticWithState>
         </Col>
         <Col span={24} md={8}>
-          <MainCard>
-            <StatisticWithState
-              title={"Total Posts (Published)"}
-              value={summary?.total_posts}
-              isLoading={isLoading}
-              isError={isError}
-            >
-              <FileTextOutlined style={{ fontSize: 30 }} />
-            </StatisticWithState>
-          </MainCard>
+          <StatisticWithState
+            title={"Total Posts (Published)"}
+            value={summary?.total_posts}
+            isLoading={isLoading}
+            isError={isError}
+          >
+            <FileTextOutlined style={{ fontSize: 30 }} />
+          </StatisticWithState>
         </Col>
         <Col span={24} md={8}>
-          <MainCard>
-            <StatisticWithState
-              title={"Total Categories"}
-              value={summary?.total_categories}
-              isLoading={isLoading}
-              isError={isError}
-            >
-              <AppstoreAddOutlined style={{ fontSize: 30 }} />
-            </StatisticWithState>
-          </MainCard>
+          <StatisticWithState
+            title={"Total Categories"}
+            value={summary?.total_categories}
+            isLoading={isLoading}
+            isError={isError}
+          >
+            <AppstoreAddOutlined style={{ fontSize: 30 }} />
+          </StatisticWithState>
         </Col>
       </Row>
       <Row gutter={[16, 16]}>
         <Col span={24} lg={12}>
-          <MainCard>
+          <CustomCard style={{ height: "100%" }}>
             <Title level={4} style={{ marginBottom: 12 }}>
               Latest Posts (Published)
             </Title>
@@ -140,10 +123,10 @@ const Dashboard = () => {
               dataSource={postsSource}
               pagination={false}
             />
-          </MainCard>
+          </CustomCard>
         </Col>
         <Col span={24} lg={12}>
-          <MainCard>
+          <CustomCard style={{ height: "100%" }}>
             <Title level={4} style={{ marginBottom: 12 }}>
               Latest Users
             </Title>
@@ -154,37 +137,11 @@ const Dashboard = () => {
               dataSource={usersSource}
               pagination={false}
             />
-          </MainCard>
+          </CustomCard>
         </Col>
       </Row>
     </div>
   );
 };
-
-function StatisticWithState({ title, value = 0, isLoading, isError, children }) {
-  return (
-    <Spin spinning={isLoading} indicator={<LoadingOutlined />}>
-      {isError ? (
-        <Typography.Text type="danger">Oops something went wrong</Typography.Text>
-      ) : (
-        <Flex justify="space-between">
-          <Statistic title={title} value={value} />
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div
-              style={{
-                padding: 20,
-                borderRadius: "50%",
-                backgroundColor: "rgba(22, 119, 255, 0.193)",
-                color: "rgb(22, 119, 255)",
-              }}
-            >
-              {children}
-            </div>
-          </div>
-        </Flex>
-      )}
-    </Spin>
-  );
-}
 
 export default Dashboard;

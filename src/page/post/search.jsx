@@ -2,7 +2,7 @@ import ListPost from "@/components/ListPost";
 import usePostParams from "@/hooks/usePostParams";
 import { useGetCategoryQuery } from "@/service/extended/categoryApi";
 import styled from "@emotion/styled";
-import { Button, Col, Flex, Radio, Row, Spin, Typography } from "antd";
+import { Button, Col, Flex, Grid, Radio, Row, Select, Spin, Typography } from "antd";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -25,6 +25,7 @@ function PostSearch() {
   const [value, setValue] = useState(null);
   const { data, isLoading } = useGetCategoryQuery();
   const { params, setParams } = usePostParams();
+  const { lg } = Grid.useBreakpoint();
 
   const categories = data?.data?.map((category) => ({
     value: category.slug,
@@ -32,9 +33,15 @@ function PostSearch() {
   }));
 
   const onChange = (e) => {
-    setValue(e.target.value);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    searchParams.set("category", e.target.value);
+    if (lg) {
+      setValue(e.target.value);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      searchParams.set("category", e.target.value);
+    } else {
+      setValue(e);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      searchParams.set("category", e);
+    }
   };
 
   const onReset = () => {
@@ -45,7 +52,7 @@ function PostSearch() {
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={16}>
+      <Col order={lg ? 0 : 2} span={24} lg={16}>
         <ListPost
           params={{
             keyword: searchParams.get("keyword"),
@@ -62,18 +69,37 @@ function PostSearch() {
           }
         />
       </Col>
-      <Col span={8}>
-        <Aside>
-          <Flex justify="space-between">
-            <p className="cs-banner-title">Filter by Category</p>
+      <Col
+        order={1}
+        span={24}
+        lg={8}
+      >
+        {lg ? (
+          <Aside>
+            <Flex justify="space-between">
+              <p className="cs-banner-title">Filter by Category</p>
+              <Button type="default" onClick={onReset}>
+                Reset
+              </Button>
+            </Flex>
+            <Spin spinning={isLoading} style={{ height: 200 }}>
+              <Radio.Group style={style} onChange={onChange} value={value} options={categories} />
+            </Spin>
+          </Aside>
+        ) : (
+          <Flex justify="space-between" gap={10} style={{marginTop: 10, position: "sticky", top: 100}}>
+            <Select
+              value={value}
+              style={{ width: "100%",  }}
+              options={categories}
+              onChange={onChange}
+              placeholder="Filter with category"
+            />
             <Button type="default" onClick={onReset}>
               Reset
             </Button>
           </Flex>
-          <Spin spinning={isLoading} style={{ height: 200 }}>
-            <Radio.Group style={style} onChange={onChange} value={value} options={categories} />
-          </Spin>
-        </Aside>
+        )}
       </Col>
     </Row>
   );
