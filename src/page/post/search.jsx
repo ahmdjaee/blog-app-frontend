@@ -73,6 +73,7 @@ function PostSearch() {
         order={1}
         span={24}
         lg={8}
+        style={{ position: "sticky", top: 60, background: "#fffff", zIndex: lg ?0 : 100 }}
       >
         {lg ? (
           <Aside>
@@ -87,10 +88,10 @@ function PostSearch() {
             </Spin>
           </Aside>
         ) : (
-          <Flex justify="space-between" gap={10} style={{marginTop: 10, position: "sticky", top: 100}}>
+          <Flex justify="space-between" gap={10} style={{ marginTop: 10 }}>
             <Select
               value={value}
-              style={{ width: "100%",  }}
+              style={{ width: "100%" }}
               options={categories}
               onChange={onChange}
               placeholder="Filter with category"
