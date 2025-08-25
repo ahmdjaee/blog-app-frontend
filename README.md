@@ -1,4 +1,2 @@
-![localhost_5173_](https://github.com/user-attachments/assets/6e6ae157-3595-4814-8261-abc2b6024885)
-<img src="https://github.com/user-attachments/assets/743ad846-6092-4819-8c88-113d24281162" width=250/>
 
-
+<img width="1800" height="998" alt="localhost_5173_ (2)" src="https://github.com/user-attachments/assets/63bbbbc7-70e1-431e-810e-2fb4b86a038b" />
