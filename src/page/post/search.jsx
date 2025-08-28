@@ -73,7 +73,7 @@ function PostSearch() {
         order={1}
         span={24}
         lg={8}
-        style={{ position: "sticky", top: 60, background: "#fffff", zIndex: lg ?0 : 100 }}
+        style={{ position: "sticky", top: 60, background: "#fffff", zIndex: lg ? 0 : 100 }}
       >
         {lg ? (
           <Aside>
@@ -90,6 +90,7 @@ function PostSearch() {
         ) : (
           <Flex justify="space-between" gap={10} style={{ marginTop: 10 }}>
             <Select
+              getPopupContainer={(trigger) => trigger.parentElement}
               value={value}
               style={{ width: "100%" }}
               options={categories}
