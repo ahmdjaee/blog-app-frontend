@@ -90,6 +90,7 @@ function PostSearch() {
         ) : (
           <Flex justify="space-between" gap={10} style={{ marginTop: 10 }}>
             <Select
+              virtual={false}
               getPopupContainer={(trigger) => trigger.parentElement}
               value={value}
               style={{ width: "100%" }}
