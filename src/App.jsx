@@ -10,7 +10,7 @@ function App() {
     <ConfigProvider
       form={{ validateMessages: validateMessage }}
       theme={{
-        algorithm: theme.darkAlgorithm,
+        // algorithm: theme.darkAlgorithm,
       }}
     >
       <Suspense fallback={<TopBarProgress />}>
