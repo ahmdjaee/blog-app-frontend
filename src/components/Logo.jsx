@@ -1,8 +1,9 @@
-import { Flex } from "antd";
+import { Flex, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 
 function Logo({ style }) {
   const navigate = useNavigate();
+  const {token} = theme.useToken()
 
   return (
     <Flex
@@ -18,6 +19,7 @@ function Logo({ style }) {
           alignSelf: "end",
           fontWeight: "bold",
           fontSize: "26px",
+          color: token.colorText
         }}
       >
         𝒟𝒾𝑔𝑔𝒾𝑒𝓈

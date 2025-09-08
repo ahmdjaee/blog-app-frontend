@@ -1,102 +1,119 @@
-// import AuthLayout from "@/layout/AuthLayout";
-// import DashboardLayout from "@/layout/DashboardLayout";
-// import MainLayout from "@/layout/MainLayout";
-// import TabLayout from "@/layout/TabLayout";
-import NotFound from "@/page/NotFound";
-import CategoryPanel from "@/page/admin-panel/category";
-import CommentPanel from "@/page/admin-panel/comment";
-import Dashboard from "@/page/admin-panel/dashboard";
-import PostPanel from "@/page/admin-panel/post";
-import PostCreatePanel from "@/page/admin-panel/post/create";
-import PostDetailPanel from "@/page/admin-panel/post/detail";
-import PostEditPanel from "@/page/admin-panel/post/edit";
-import UserPanel from "@/page/admin-panel/user";
-import Login from "@/page/auth/login";
-import Register from "@/page/auth/register";
-import Bookmark from "@/page/bookmark";
-import Home from "@/page/home";
-import PostByCategory from "@/page/post";
-import PostDetail from "@/page/post/detail";
-import PostSearch from "@/page/post/search";
-import UserPostLayout from "@/page/user-panel/UserPostLayout";
-import UserProfileLayout from "@/page/user-panel/UserProfileLayout";
-import UserDashboard from "@/page/user-panel/dashboard";
-import UserCommentPanel from "@/page/user-panel/post/comment";
-import UserPostCreatePanel from "@/page/user-panel/post/create";
-import UserDraftPanel from "@/page/user-panel/post/draft";
-import UserPostEditPanel from "@/page/user-panel/post/edit";
-import UserPublishedPanel from "@/page/user-panel/post/published";
-import UserAccountPanel from "@/page/user-panel/profile/account";
-import UserSocialPanel from "@/page/user-panel/profile/social";
-import Stats from "@/page/user-panel/stats";
-import RecommendationPanel from "@/page/admin-panel/recommendation";
-import { createRoutesFromElements, Route } from "react-router";
-import { createBrowserRouter } from "react-router-dom";
+// router.tsx
+import { lazy, Suspense } from "react";
+import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
+
+// Guards (kalau ringan bisa tetap eager; kalau berat juga bisa dilazy)
+import TopBarProgress from "react-topbar-progress-indicator";
 import MustIsAdmin from "./MustIsAdmin";
 import MustIsUser from "./MustIsUser";
 import MustNotAuth from "./MustNotAuth";
 import RequireAuth from "./RequireAuth";
-import { lazy } from "react";
 
-// === Layouts
-const AuthLayout = lazy(() => import("@/layout/AuthLayout"));
-const DashboardLayout = lazy(() => import("@/layout/DashboardLayout"));
-const MainLayout = lazy(() => import("@/layout/MainLayout"));
-const TabLayout = lazy(() => import("@/layout/TabLayout"));
+// Helper kecil biar rapi
+const lazyEl = (factory, Fallback = <TopBarProgress />) => {
+  const C = lazy(factory);
+  return (
+    <Suspense fallback={Fallback}>
+      <C />
+    </Suspense>
+  );
+};
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={lazyEl(() => import("@/page/NotFound"))} />
+
       <Route element={<RequireAuth />}>
         <Route element={<MustIsAdmin />}>
-          <Route path="admin" element={<DashboardLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="categories" element={<CategoryPanel />} />
-            <Route path="users" element={<UserPanel />} />
-            <Route path="posts" element={<PostPanel />} />
-            <Route path="comments" element={<CommentPanel />} />
-            <Route path="recommendations" element={<RecommendationPanel />} />
-            <Route path="posts/create" element={<PostCreatePanel />} />
-            <Route path="posts/edit" element={<PostEditPanel />} />
-            <Route path="posts/:slug" element={<PostDetailPanel />} />
+          <Route path="admin" element={lazyEl(() => import("@/layout/DashboardLayout"))}>
+            <Route
+              path="dashboard"
+              element={lazyEl(() => import("@/page/admin-panel/dashboard"))}
+            />
+            <Route
+              path="categories"
+              element={lazyEl(() => import("@/page/admin-panel/category"))}
+            />
+            <Route path="users" element={lazyEl(() => import("@/page/admin-panel/user"))} />
+            <Route path="posts" element={lazyEl(() => import("@/page/admin-panel/post"))} />
+            <Route path="comments" element={lazyEl(() => import("@/page/admin-panel/comment"))} />
+            <Route
+              path="recommendations"
+              element={lazyEl(() => import("@/page/admin-panel/recommendation"))}
+            />
+            <Route
+              path="posts/create"
+              element={lazyEl(() => import("@/page/admin-panel/post/create"))}
+            />
+            <Route
+              path="posts/edit"
+              element={lazyEl(() => import("@/page/admin-panel/post/edit"))}
+            />
+            <Route
+              path="posts/:slug"
+              element={lazyEl(() => import("@/page/admin-panel/post/detail"))}
+            />
           </Route>
         </Route>
       </Route>
 
-      <Route path="/" element={<MainLayout />}>
-        <Route element={<TabLayout />}>
-          <Route index element={<Home />} />
-          <Route path="posts/category/:category" element={<PostByCategory />} />
+      <Route path="/" element={lazyEl(() => import("@/layout/MainLayout"))}>
+        <Route element={lazyEl(() => import("@/layout/TabLayout"))}>
+          <Route index element={lazyEl(() => import("@/page/home"))} />
+          <Route path="posts/category/:category" element={lazyEl(() => import("@/page/post"))} />
         </Route>
-        <Route path="posts/search" element={<PostSearch />} />
-        <Route path="posts/:slug" element={<PostDetail />} />
+
+        <Route path="posts/search" element={lazyEl(() => import("@/page/post/search"))} />
+        <Route path="posts/:slug" element={lazyEl(() => import("@/page/post/detail"))} />
+
         <Route element={<RequireAuth />}>
-          <Route path="posts/bookmarks" element={<Bookmark />} />
+          <Route path="posts/bookmarks" element={lazyEl(() => import("@/page/bookmark"))} />
           <Route path="user" element={<MustIsUser />}>
-            <Route path="dashboard" element={<UserDashboard />} />
-            <Route path="posts" element={<UserPostLayout />}>
-              <Route path="drafts" element={<UserDraftPanel />} />
-              <Route path="published" element={<UserPublishedPanel />} />
-              <Route path="comments" element={<UserCommentPanel />} />
+            <Route path="dashboard" element={lazyEl(() => import("@/page/user-panel/dashboard"))} />
+            <Route path="posts" element={lazyEl(() => import("@/page/user-panel/UserPostLayout"))}>
+              <Route path="drafts" element={lazyEl(() => import("@/page/user-panel/post/draft"))} />
+              <Route
+                path="published"
+                element={lazyEl(() => import("@/page/user-panel/post/published"))}
+              />
+              <Route
+                path="comments"
+                element={lazyEl(() => import("@/page/user-panel/post/comment"))}
+              />
             </Route>
-            <Route path="stats" element={<Stats />} />
-            <Route path="posts/create" element={<UserPostCreatePanel />} />
-            <Route path="posts/edit" element={<UserPostEditPanel />} />
-            <Route path="posts/:slug" element={<PostDetailPanel />} />
+            <Route path="stats" element={lazyEl(() => import("@/page/user-panel/stats"))} />
+            <Route
+              path="posts/create"
+              element={lazyEl(() => import("@/page/user-panel/post/create"))}
+            />
+            <Route
+              path="posts/edit"
+              element={lazyEl(() => import("@/page/user-panel/post/edit"))}
+            />
+            <Route
+              path="posts/:slug"
+              element={lazyEl(() => import("@/page/admin-panel/post/detail"))}
+            />
           </Route>
 
-          <Route path="user/profile" element={<UserProfileLayout />}>
-            <Route index element={<UserAccountPanel />} />
-            <Route path="socials" element={<UserSocialPanel />} />
+          <Route
+            path="user/profile"
+            element={lazyEl(() => import("@/page/user-panel/UserProfileLayout"))}
+          >
+            <Route index element={lazyEl(() => import("@/page/user-panel/profile/account"))} />
+            <Route
+              path="socials"
+              element={lazyEl(() => import("@/page/user-panel/profile/social"))}
+            />
           </Route>
         </Route>
       </Route>
 
       <Route element={<MustNotAuth />}>
-        <Route path="auth" element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+        <Route path="auth" element={lazyEl(() => import("@/layout/AuthLayout"))}>
+          <Route path="login" element={lazyEl(() => import("@/page/auth/login"))} />
+          <Route path="register" element={lazyEl(() => import("@/page/auth/register"))} />
         </Route>
       </Route>
     </Route>

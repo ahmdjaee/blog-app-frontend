@@ -1,20 +1,19 @@
 import ListPost from "@/components/ListPost";
 import { selectPost, setPostParams } from "@/redux/postSlice";
-import { useGetBaseQuery } from "@/service/baseApi";
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 function Home() {
   // const { params, setParams } = usePostParams();
-  const dispatch = useDispatch()
-  const params = useSelector(selectPost)
+  const dispatch = useDispatch();
   // const { data: popular, isLoading, isError } = useGetBaseQuery({ url: "/posts/popular" });
+  const params = useSelector(selectPost);
 
-  return (
-    <ListPost
-      params={params}
-      onLoadMore={() => dispatch(setPostParams({ ...params, limit: params.limit + 15 }))}
-    />
-  );
+  const onLoadMore = useCallback(() => {
+    dispatch(setPostParams({ ...params, limit: params.limit + 15 }));
+  }, [dispatch, params]);
+
+  return <ListPost params={params} onLoadMore={onLoadMore} />;
 }
 
 export default Home;

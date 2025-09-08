@@ -16,7 +16,19 @@ import {
   LogoutOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Drawer, Flex, FloatButton, Grid, Input, Layout, Menu, Modal } from "antd";
+import {
+  Button,
+  Card,
+  Drawer,
+  Flex,
+  FloatButton,
+  Grid,
+  Input,
+  Layout,
+  Menu,
+  Modal,
+  theme,
+} from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -31,6 +43,7 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { lg, md } = Grid.useBreakpoint();
+  const { token } = theme.useToken();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -114,9 +127,12 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="cs-layout">
+    <div className="cs-layout" style={{ backgroundColor: token.colorBgContainer }}>
       {/* ANCHOR Navbar */}
-      <nav className="cs-navbar">
+      <nav
+        className="cs-navbar"
+        style={{ background: token.colorBgContainer, boxShadow: `0 2px 8px ${token.colorBorderBg}` }}
+      >
         <Flex
           justify="end"
           gap={"16px"}
@@ -179,7 +195,7 @@ const MainLayout = () => {
       <Content
         style={{
           padding: "0 16px 16px 16px",
-          backgroundColor: "#fff",
+          backgroundColor: token.colorBgContainer,
           maxWidth: "1200px",
           width: "100%",
           margin: "0 auto",
