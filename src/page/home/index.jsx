@@ -10,7 +10,7 @@ function Home() {
   const params = useSelector(selectPost);
 
   const onLoadMore = useCallback(() => {
-    dispatch(setPostParams({ ...params, limit: params.limit + 15 }));
+    dispatch(setPostParams({ ...params, limit: params.limit + 20 }));
   }, [dispatch, params]);
 
   return <ListPost params={params} onLoadMore={onLoadMore} />;

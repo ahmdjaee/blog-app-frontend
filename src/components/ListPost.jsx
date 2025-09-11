@@ -1,6 +1,6 @@
 import PostCard from "@/components/PostCard";
 import { useGetPostsQuery } from "@/service/extended/postApi";
-import { Button, Empty, Flex, Skeleton, Spin, Typography } from "antd";
+import { Button, Empty, Skeleton, Spin } from "antd";
 import { memo } from "react";
 
 const LoadMoreButton = memo(function SomeComponent({ onLoadMore, isFetching, isEnd }) {

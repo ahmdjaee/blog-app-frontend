@@ -1,16 +1,8 @@
 import { LikeFilled, MessageFilled } from "@ant-design/icons";
-import { Avatar, Col, Grid, Image, Row, theme } from "antd";
+import { Avatar, Grid, Image, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import BookmarkToggle from "./BookmarkToggle";
-import { styled } from "styled-system/jsx";
-
-const Card = styled.div`
-  height: 100%;
-  min-height: 150px;
-  padding: 16px ;
-  cursor: pointer;
-  border-bottom: 1px solid #f0f0f0;
-`;
+import PropTypes from "prop-types";
 
 function PostCard({ post = {} }) {
   const navigate = useNavigate();
@@ -18,8 +10,8 @@ function PostCard({ post = {} }) {
   const { md } = Grid.useBreakpoint();
 
   return (
-    <Card >
-      <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
+    <div className="h-full min-h-[150px] p-[16px] cursor-pointer [border-bottom:1px_solid_#f0f0f0]">
+      <div className="flex gap-2 items-center mb-[10px]">
         <Avatar
           size={"small"}
           style={{
@@ -31,15 +23,12 @@ function PostCard({ post = {} }) {
           {post?.author?.name.charAt(0).toUpperCase()}
         </Avatar>
         <p>{post?.author?.name}</p>|
-        <p
-          className="cs-ellipsis-1"
-          style={{ marginRight: 8, fontWeight: "600", color: token.colorPrimary }}
-        >
+        <p className="cs-ellipsis-1 font-semibold mr-2" style={{ color: token.colorPrimary }}>
           {post.category.name}
         </p>
       </div>
-      <Row gutter={{ xs: 8, sm: 10, md: 12, lg: 16 }} style={{ width: "100%" }}>
-        <Col span={6}>
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-3">
           <Image
             width={"100%"}
             style={{
@@ -47,18 +36,19 @@ function PostCard({ post = {} }) {
               objectPosition: "top",
               aspectRatio: "1/1",
             }}
+            loading="lazy"
             src={post.thumbnail}
             alt={post.title}
           />
-        </Col>
-        <Col span={18}>
+        </div>
+        <div className="col-span-9">
           <div
-            style={{ height: "100%", display: "flex", flexDirection: "column" }}
+            className="h-full flex flex-col"
             onClick={() => navigate(`/posts/${post.slug}`, { state: { post } })}
           >
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h2
-                style={{ marginBottom: md ? 8 : 0, fontWeight: "700", fontSize: md ? 24 : 20,  }}
+                style={{ marginBottom: md ? 8 : 0, fontWeight: "700", fontSize: md ? 24 : 20 }}
                 className="cs-ellipsis"
               >
                 {post.title}
@@ -66,43 +56,39 @@ function PostCard({ post = {} }) {
               <BookmarkToggle isMark={post?.marked} postId={post?.id} />
             </div>
             <h3
-              style={{ marginBottom: 16, fontWeight: "normal", color: "rgb(107, 107, 107)", lineHeight: 1.5 }}
-              className="cs-ellipsis"
+              className="mb-4 font-normal leading-relaxed cs-ellipsis"
+              style={{ color: "rgb(107, 107, 107)" }}
             >
               {post?.sub_title}
             </h3>
-            <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between" }}>
-              <p style={{ textWrap: "nowrap" }}>{post.published_at}</p>
-
-              <div
-                style={{
-                  marginTop: "6px",
-                  display: "flex",
-                  justifyContent: "end",
-                  gap: 16,
-                  marginRight: "8px",
-                }}
-              >
+            <div className="mt-auto flex justify-between">
+              <p className="truncate">{post.published_at}</p>
+              <div className="mt-1.5 flex justify-end gap-4 mr-2">
                 {/* <IconText icon={EyeFilled} text={100} /> */}
                 <IconText icon={MessageFilled} text={post?.comments} />
                 <IconText icon={LikeFilled} text={post?.likes} />
               </div>
             </div>
           </div>
-        </Col>
-      </Row>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 }
 
 function IconText({ icon: Icon, text }) {
   const { token } = theme.useToken();
   return (
-    <div style={{ alignItems: "center", gap: 4, display: "flex" }}>
+    <div className="flex items-center gap-1">
       <Icon style={{ color: token.colorTextSecondary }} />{" "}
       <p style={{ color: token.colorTextSecondary }}>{text}</p>
     </div>
   );
 }
+
+IconText.propTypes = {
+  icon: PropTypes.elementType.isRequired,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+};
 
 export default PostCard;

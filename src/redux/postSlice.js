@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   params: {
-    limit: 15,
+    limit: 20,
     page: 1,
     published: 1,
   },
