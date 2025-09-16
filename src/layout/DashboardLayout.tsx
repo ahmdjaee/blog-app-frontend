@@ -16,13 +16,13 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import { Button, Grid, Layout, Menu, Modal, theme } from "antd";
-import React, { useEffect } from "react";
+import React, { CSSProperties, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 const { useBreakpoint } = Grid;
 const { Header, Content, Footer, Sider } = Layout;
 
-const siderStyle = {
+const siderStyle: CSSProperties = {
   overflow: "auto",
   height: "100vh",
   position: "fixed",

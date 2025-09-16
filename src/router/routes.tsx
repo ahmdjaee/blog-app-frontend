@@ -8,9 +8,16 @@ import MustIsAdmin from "./MustIsAdmin";
 import MustIsUser from "./MustIsUser";
 import MustNotAuth from "./MustNotAuth";
 import RequireAuth from "./RequireAuth";
+import DashboardLayout from "@/layout/DashboardLayout";
+import MainLayout from "@/layout/MainLayout";
+import AuthLayout from "@/layout/AuthLayout";
+import TabLayout from "@/layout/TabLayout";
 
 // Helper kecil biar rapi
-const lazyEl = (factory, Fallback = <TopBarProgress />) => {
+const lazyEl = (
+  factory: () => Promise<{ default: React.ComponentType<any> }>,
+  Fallback = <TopBarProgress />
+) => {
   const C = lazy(factory);
   return (
     <Suspense fallback={Fallback}>
@@ -26,7 +33,7 @@ export const router = createBrowserRouter(
 
       <Route element={<RequireAuth />}>
         <Route element={<MustIsAdmin />}>
-          <Route path="admin" element={lazyEl(() => import("@/layout/DashboardLayout"))}>
+          <Route path="admin" element={<DashboardLayout />}>
             <Route
               path="dashboard"
               element={lazyEl(() => import("@/page/admin-panel/dashboard"))}
@@ -58,8 +65,8 @@ export const router = createBrowserRouter(
         </Route>
       </Route>
 
-      <Route path="/" element={lazyEl(() => import("@/layout/MainLayout"))}>
-        <Route element={lazyEl(() => import("@/layout/TabLayout"))}>
+      <Route path="/" element={<MainLayout />}>
+        <Route element={<TabLayout />}>
           <Route index element={lazyEl(() => import("@/page/home"))} />
           <Route path="posts/category/:category" element={lazyEl(() => import("@/page/post"))} />
         </Route>
@@ -111,7 +118,7 @@ export const router = createBrowserRouter(
       </Route>
 
       <Route element={<MustNotAuth />}>
-        <Route path="auth" element={lazyEl(() => import("@/layout/AuthLayout"))}>
+        <Route path="auth" element={<AuthLayout />}>
           <Route path="login" element={lazyEl(() => import("@/page/auth/login"))} />
           <Route path="register" element={lazyEl(() => import("@/page/auth/register"))} />
         </Route>

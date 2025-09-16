@@ -1,33 +1,36 @@
+import CustomCard from "@/components/CustomCard";
 import FloatCircularIndicator from "@/components/FloatCircularIndicator";
-import { useLoginMutation } from "@/service/extended/authApi";
+import { useLoginMutation, useRegisterMutation } from "@/service/extended/authApi";
 import { setUserAndToken } from "@/service/token";
-import { HomeFilled, LockOutlined, MailOutlined } from "@ant-design/icons";
-import styled from "@emotion/styled";
-import { Button, Checkbox, Flex, Form, Input, Space } from "antd";
+import { HomeFilled, LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Flex, Form, Input } from "antd";
 import Title from "antd/es/typography/Title";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const MainCard = styled.div`
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  padding: 32px 30px;
-`;
-
-const Login = () => {
-  const navigate = useNavigate();
+const Register = () => {
+  const [register, { isLoading }] = useRegisterMutation();
   const location = useLocation();
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading: isLoadingLogin }] = useLoginMutation();
+  const navigate = useNavigate();
+
   let from = location.state?.from?.pathname || window.history.state?.prevUrl || "/";
 
-  const onFinish = async (formData) => {
+  const onFinish = async (values) => {
     try {
-      const { data } = await login(formData).unwrap();
+      await register(values).unwrap();
+      // navigate("/auth/login");
+      const { data } = await login({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
+
       setUserAndToken(data);
       navigate(from, { replace: true });
-    } catch {}
+    } catch (error) {}
   };
 
   return (
-    <FloatCircularIndicator isLoading={isLoading}>
+    <FloatCircularIndicator isLoading={isLoading || isLoadingLogin}>
       <div className="">
         <Link to={"/"}>
           <Flex style={{ marginBottom: 24 }} justify="center" gap={12}>
@@ -35,20 +38,29 @@ const Login = () => {
             Home
           </Flex>
         </Link>
-        <MainCard>
+        <CustomCard style={{ padding: "32px 30px" }}>
           <Form
-            name="login"
+            name="register"
             style={{
-              maxWidth: 600,
               width: 360,
             }}
             size="large"
             onFinish={onFinish}
           >
-            <Title level={3} style={{ marginBottom: 20 }}>
-              Login
+            <Title level={4} style={{ marginBottom: 20 }}>
+              Register
             </Title>
 
+            <Form.Item
+              name="name"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined />} placeholder="Name" />
+            </Form.Item>
             <Form.Item
               name="email"
               rules={[
@@ -65,30 +77,22 @@ const Login = () => {
               rules={[
                 {
                   required: true,
+                  min: 8,
                 },
               ]}
             >
               <Input.Password prefix={<LockOutlined />} placeholder="Password" />
             </Form.Item>
-            <Form.Item>
-              <Flex justify="space-between" align="center">
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-                <Link to="">Forgot password</Link>
-              </Flex>
-            </Form.Item>
-
             <Form.Item style={{ textAlign: "center" }}>
               <Button style={{ marginBottom: "16px" }} block type="primary" htmlType="submit">
-                Log in
+                Register
               </Button>
-              or <Link to="/auth/register">Register now!</Link>
+              already have an account? <Link to="/auth/login">Log in</Link>
             </Form.Item>
           </Form>
-        </MainCard>
+        </CustomCard>
       </div>
     </FloatCircularIndicator>
   );
 };
-export default Login;
+export default Register;

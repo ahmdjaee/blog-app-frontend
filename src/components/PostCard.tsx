@@ -2,7 +2,6 @@ import { LikeFilled, MessageFilled } from "@ant-design/icons";
 import { Avatar, Grid, Image, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import BookmarkToggle from "./BookmarkToggle";
-import PropTypes from "prop-types";
 
 function PostCard({ post = {} }) {
   const navigate = useNavigate();
@@ -76,7 +75,7 @@ function PostCard({ post = {} }) {
   );
 }
 
-function IconText({ icon: Icon, text }) {
+function IconText({ icon: Icon, text }: { icon: React.ElementType; text: string }) {
   const { token } = theme.useToken();
   return (
     <div className="flex items-center gap-1">
@@ -85,10 +84,5 @@ function IconText({ icon: Icon, text }) {
     </div>
   );
 }
-
-IconText.propTypes = {
-  icon: PropTypes.elementType.isRequired,
-  text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-};
 
 export default PostCard;

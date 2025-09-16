@@ -1,8 +1,8 @@
 import { notification } from "antd";
 
-export function successHandler(payload) {
+export function successHandler(payload = { message: "" }) {
   notification.success({
     message: "Success",
-    description: payload?.message,
+    description: payload.message,
   });
 }

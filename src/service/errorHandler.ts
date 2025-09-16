@@ -1,7 +1,12 @@
 import { showLoginModal } from "@/components/LoginModal";
 import { notification } from "antd";
 
-export function errorHandler(response) {
+interface Response {
+  status: number;
+  data: any;
+}
+
+export function errorHandler(response: Response) {
   if (response?.status === 500) {
     notification.error({
       message: "Internal Server Error",

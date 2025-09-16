@@ -1,9 +1,10 @@
 import { useToggleBookmarkMutation } from "@/service/extended/bookmarkApi";
 import { Button, Tooltip } from "antd";
+import React from "react";
 
-const BookmarkToggle = ({ isMark = false, postId }) => {
+const BookmarkToggle = ({ isMark = false, postId = "" }) => {
   const [toggleBookmark, { isLoading }] = useToggleBookmarkMutation();
-  const handleBookmark = async (e) => {
+  const handleBookmark = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
       await toggleBookmark({ post_id: postId }).unwrap();

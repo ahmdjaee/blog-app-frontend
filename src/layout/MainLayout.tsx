@@ -29,6 +29,7 @@ import {
   Modal,
   theme,
 } from "antd";
+import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -51,7 +52,7 @@ const MainLayout = () => {
 
   const [logout] = useLogoutMutation();
 
-  const items = [
+  const items : ItemType<MenuItemType>[] = [
     {
       key: "/",
       label: "Home",
@@ -127,11 +128,11 @@ const MainLayout = () => {
   };
 
   return (
-    <div className="cs-layout" style={{ backgroundColor: token.colorBgContainer }}>
+    <div className="cs-layout" style={{ backgroundColor: token.colorBgBase }}>
       {/* ANCHOR Navbar */}
       <nav
         className="cs-navbar"
-        style={{ background: token.colorBgContainer, boxShadow: `0 2px 8px ${token.colorBorderBg}` }}
+        style={{ background: "inherit", boxShadow: `0 0px 8px ${token.colorBorder}` }}
       >
         <Flex
           justify="end"
@@ -140,7 +141,7 @@ const MainLayout = () => {
           align="center"
         >
           {location.pathname !== "/" && !lg && <ArrowLeftOutlined onClick={() => navigate(-1)} />}
-          {md && <Logo style={{ fontSize: 20, marginRight: "auto" }} />}
+          {md && <Logo style={{ fontSize: 20, marginRight: "auto",  }} />}
 
           <ProfileButton
             style={{
@@ -195,7 +196,7 @@ const MainLayout = () => {
       <Content
         style={{
           padding: "0 16px 16px 16px",
-          backgroundColor: token.colorBgContainer,
+          backgroundColor: "inherit",
           maxWidth: "1200px",
           width: "100%",
           margin: "0 auto",

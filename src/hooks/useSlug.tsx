@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useSlug = ({ value }) => {
+const useSlug = ({ value = "" }) => {
   const [slug, setSlug] = useState("");
   
   useEffect(() => {

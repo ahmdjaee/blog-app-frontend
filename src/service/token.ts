@@ -4,7 +4,7 @@ const getCurrentUserAndToken = () => {
   return JSON.parse(user);
 };
 
-const setUserAndToken = (data) => {
+const setUserAndToken = (data = {}) => {
   localStorage.setItem("user-access-token", JSON.stringify(data));
 };
 

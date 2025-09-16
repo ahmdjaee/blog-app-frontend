@@ -4,14 +4,13 @@ import { RouterProvider } from "react-router-dom";
 import TopBarProgress from "react-topbar-progress-indicator";
 import { validateMessage } from "./lib/rule";
 import { router } from "./router/routes";
+import { configProvider } from "./theme";
 
 function App() {
   return (
     <ConfigProvider
       form={{ validateMessages: validateMessage }}
-      theme={{
-        // algorithm: theme.darkAlgorithm,
-      }}
+      theme={configProvider}
     >
       <Suspense fallback={<TopBarProgress />}>
         <RouterProvider router={router} />

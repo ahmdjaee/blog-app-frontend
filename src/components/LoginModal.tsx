@@ -4,7 +4,7 @@ export function showLoginModal() {
   const onOk = () => {
     window.history.pushState(
       { prevUrl: window.location.pathname },
-      null,
+      "",
       "/auth/login"
     );
     window.location.href = "/auth/login";

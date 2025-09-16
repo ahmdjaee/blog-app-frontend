@@ -2,7 +2,6 @@ import CustomCard from "@/components/CustomCard";
 import StatisticWithState from "@/components/StatisticWithState";
 import { useGetBaseQuery } from "@/service/baseApi";
 import { AppstoreAddOutlined, FileTextOutlined, TeamOutlined } from "@ant-design/icons";
-import styled from "@emotion/styled";
 import { Button, Col, Row, Table, Tooltip, Typography } from "antd";
 
 const { Title } = Typography;

@@ -1,11 +1,11 @@
 import { removeAuth } from "@/redux/authSlice";
-import { isFulfilled, isRejectedWithValue } from "@reduxjs/toolkit";
+import { isFulfilled, isRejectedWithValue, MiddlewareAPI } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { notification } from "antd";
 import { getCurrentUserAndToken, removeUserAndToken } from "./token";
 import { successHandler } from "./successHandler";
 
-export const handleResponse = (api) => (next) => (action) => {
+export const handleResponse = (api: MiddlewareAPI) => (next) => (action) => {
   if (isFulfilled(action)) {
     const type = action?.meta?.arg?.type;
     const endpoints = action?.meta?.arg?.endpointName;
